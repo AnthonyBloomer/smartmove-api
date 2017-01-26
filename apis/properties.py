@@ -16,8 +16,9 @@ property = api.model('Property', {
 
 
 @api.route('/')
-@api.param('page', 'The page number.')
+@api.param('offset', 'The page number.')
 @api.param('sale_type', 'The sale type')
+@api.response(404, 'Invalid sale type.')
 class PropertyList(Resource):
     @api.doc('list_properties')
     @api.marshal_list_with(property)
@@ -31,7 +32,9 @@ class PropertyList(Resource):
               "limit %s, %s"
 
         if request.args.get('sale_type'):
-            sale_type = int(request.args.get('sale_type'))
+            if request.args.get('sale_type') > 2:
+                api.abort(404)
+            sale_type = request.args.get('sale_type')
 
         params.append(sale_type)
 
