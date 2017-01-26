@@ -1,5 +1,6 @@
 from flask_restplus import Namespace, Resource, fields
 from core.connection import conn
+from flask import request
 
 api = Namespace('towns', description='Get property sale statistics for each town.')
 
@@ -12,11 +13,22 @@ town = api.model('Town', {
 
 
 @api.route('/')
+@api.param('sort_by', 'The sort type.')
+@api.param('sort_order', 'The sort order.')
 class PropertyList(Resource):
     @api.doc('list_town_statistics')
     @api.marshal_list_with(town)
     def get(self):
-        sql = "select * from fact_town"
+        sort_by = 'id'
+        sort_order = 'asc'
+
+        if request.args.get('sort_by'):
+            sort_by = 'average_sale_price' if request.args.get('sort_by') == 'price' else 'total_number_of_sales'
+
+        if request.args.get('sort_order'):
+            sort_order = 'desc' if request.args.get('sort_order') == 'desc' else 'asc'
+
+        sql = "select * from fact_town order by %s %s" % (sort_by, sort_order)
         with conn.cursor() as cursor:
             cursor.execute(sql)
         data = cursor.fetchall()
