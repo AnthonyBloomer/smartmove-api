@@ -1,6 +1,6 @@
 from flask_restplus import Namespace, Resource, fields
-from flask import request
 from core.utils import paginate
+from flask import request
 from core.connection import conn
 
 api = Namespace('properties', description='Property related operations')
@@ -16,19 +16,28 @@ property = api.model('Property', {
 
 
 @api.route('/')
-@api.param('page', 'The page number')
+@api.param('page', 'The page number.')
+@api.param('sale_type', 'The sale type')
 class PropertyList(Resource):
     @api.doc('list_properties')
     @api.marshal_list_with(property)
     def get(self):
         params = []
-        sql = "select * from smartmove.properties as p " \
-              "join smartmove.counties as c " \
+        sale_type = 1
+        sql = "select p.id, p.address, p.date_time, p.description, p.price, c.county_name from smartmove.properties as p " \
+              "left join smartmove.counties as c " \
               "on p.county_id = c.id " \
+              "where p.sale_type = %s " \
               "limit %s, %s"
+
+        if request.args.get('sale_type'):
+            sale_type = int(request.args.get('sale_type'))
+
+        params.append(sale_type)
 
         for d in paginate():
             params.append(d)
+
         with conn.cursor() as cursor:
             cursor.execute(sql, params)
         data = cursor.fetchall()
