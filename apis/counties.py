@@ -6,7 +6,8 @@ api = Namespace('counties', description='Get property sale statistics for each c
 county = api.model('County', {
     'county_name': fields.String(required=True, description='The county.'),
     'average_sale_price': fields.String(description='The average sale price.'),
-    'total_number_of_sales': fields.String(description="The total number of sales.")
+    'total_number_of_sales': fields.String(description="The total number of sales."),
+    'year': fields.String(description='Year')
 })
 
 
@@ -29,8 +30,14 @@ class Property(Resource):
     @api.doc('get_property')
     @api.marshal_with(county)
     def get(self, county_name):
+        # Get the overall sale statistics
         sql = "select * from fact_county as f join dim_county as c on f.county_id = c.id where county_name like %s"
         with conn.cursor() as cursor:
             cursor.execute(sql, county_name)
         data = cursor.fetchone()
-        return data if data else api.abort(404)
+        # Get yearly sale statistics for the given county.
+        sql = "select * from fact_year as f join dim_county as d on d.id = f.county_id where county_name LIKE %s"
+        with conn.cursor() as cursor:
+            cursor.execute(sql, county_name)
+        y = cursor.fetchall()
+        return [data, y] if data and y else api.abort(404)
