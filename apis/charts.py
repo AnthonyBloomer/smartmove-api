@@ -18,8 +18,9 @@ class Chart(Resource):
               'where county_name like %s'
         with conn.cursor() as cursor:
             cursor.execute(sql, county_name)
-
         data = cursor.fetchall()
+        if not data:
+            api.abort(404)
         data = [tuple(d.values()) for d in data]
         data_table = gviz_api.DataTable([("Number of Sales", "number"), ("Year", "String")])
         data_table.LoadData(data)
