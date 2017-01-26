@@ -1,36 +1,47 @@
 from flask_restplus import Namespace, Resource, fields
+from core.connection import conn
 
-api = Namespace('cats', description='Cats related operations')
+api = Namespace('properties', description='Property related operations')
 
-cat = api.model('Cat', {
-    'id': fields.String(required=True, description='The cat identifier'),
-    'name': fields.String(required=True, description='The cat name'),
+property = api.model('Property', {
+    'id': fields.String(required=True, description='The property identifier'),
+    'address': fields.String(required=True, description='The address'),
+    'price': fields.String(required=True, description='The price')
 })
-
-CATS = [
-    {'id': 'felix', 'name': 'Felix'},
-    {'id': 'wut', 'name': 'yo'}
-]
 
 
 @api.route('/')
-class CatList(Resource):
-    @api.doc('list_cats')
-    @api.marshal_list_with(cat)
+class PropertyList(Resource):
+    @api.doc('list_properties')
+    @api.marshal_list_with(property)
     def get(self):
-        '''List all cats'''
-        return CATS
+        sql = "SELECT * " \
+              "FROM smartmove.properties " \
+              "WHERE sale_type = 1 " \
+              "LIMIT 0, 10"
+
+        with conn.cursor() as cursor:
+            cursor.execute(sql)
+
+        data = cursor.fetchall()
+        return data
 
 
 @api.route('/<id>')
-@api.param('id', 'The cat identifier')
-@api.response(404, 'Cat not found')
-class Cat(Resource):
-    @api.doc('get_cat')
-    @api.marshal_with(cat)
+@api.param('id', 'The property identifier')
+@api.response(404, 'Property not found')
+class Property(Resource):
+    @api.doc('get_property')
+    @api.marshal_with(property)
     def get(self, id):
-        '''Fetch a cat given its identifier'''
-        for cat in CATS:
-            if cat['id'] == id:
-                return cat
+        sql = "SELECT * " \
+              "FROM smartmove.properties " \
+              "WHERE id = %s"
+
+        with conn.cursor() as cursor:
+            cursor.execute(sql, id)
+
+        data = cursor.fetchone()
+        if data:
+            return data
         api.abort(404)
