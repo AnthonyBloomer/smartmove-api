@@ -16,6 +16,7 @@ property = api.model('Property', {
 
 
 @api.route('/')
+@api.param('page', 'The page number')
 class PropertyList(Resource):
     @api.doc('list_properties')
     @api.marshal_list_with(property)
