@@ -6,6 +6,9 @@ api = Namespace('properties', description='Property related operations')
 property = api.model('Property', {
     'id': fields.String(required=True, description='The property identifier'),
     'address': fields.String(required=True, description='The address'),
+    'county_name': fields.String(required=True, description='The county.'),
+    'description': fields.String(required=True, description='The description.'),
+    'date_time': fields.String(required=True, description='The date of sale.'),
     'price': fields.String(required=True, description='The price')
 })
 
@@ -15,14 +18,12 @@ class PropertyList(Resource):
     @api.doc('list_properties')
     @api.marshal_list_with(property)
     def get(self):
-        sql = "SELECT * " \
-              "FROM smartmove.properties " \
-              "WHERE sale_type = 1 " \
-              "LIMIT 0, 10"
-
+        sql = "select * from smartmove.properties as p " \
+              "join smartmove.counties as c " \
+              "on p.county_id = c.id " \
+              "limit 0, 10"
         with conn.cursor() as cursor:
             cursor.execute(sql)
-
         data = cursor.fetchall()
         return data
 
@@ -34,14 +35,11 @@ class Property(Resource):
     @api.doc('get_property')
     @api.marshal_with(property)
     def get(self, id):
-        sql = "SELECT * " \
-              "FROM smartmove.properties " \
-              "WHERE id = %s"
-
+        sql = "select * from smartmove.properties as p " \
+              "join smartmove.counties as c " \
+              "on p.county_id = c.id " \
+              "where p.id = %s"
         with conn.cursor() as cursor:
             cursor.execute(sql, id)
-
         data = cursor.fetchone()
-        if data:
-            return data
-        api.abort(404)
+        return data if data else api.abort(404)
