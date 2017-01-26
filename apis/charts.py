@@ -5,7 +5,7 @@ import gviz_api
 api = Namespace('chart', description='Return the average sale price over time for a given county.')
 
 
-@api.route('/<county_name>')
+@api.route('/<county_name>', doc=False)
 @api.param('county_name', 'The county name.')
 @api.response(404, 'Property not found')
 class Chart(Resource):
