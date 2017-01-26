@@ -5,14 +5,14 @@ api = Namespace('counties', description='Get property sale statistics for each c
 
 county = api.model('County', {
     'id': fields.String(required=True, description='The county identifier'),
-    'county_name': fields.String(required=True, description='The county.'),
+    'county_name': fields.String(required=True, description='The county name.'),
     'average_sale_price': fields.String(description='The average sale price.'),
     'total_number_of_sales': fields.String(description="The total number of sales.")
 })
 
 year_stats = api.model('Year', {
     'id': fields.String(required=True, description='The county identifier'),
-    'county_name': fields.String(required=True, description='The county.'),
+    'county_name': fields.String(required=True, description='The county name.'),
     'average_sale_price': fields.String(description='The average sale price.'),
     'total_number_of_sales': fields.String(description="The total number of sales."),
     'year': fields.String(description="Year")
@@ -47,7 +47,7 @@ class Property(Resource):
 
 @api.route('/<county_name>/<year>')
 @api.param('county_name', 'The county name.')
-@api.param('year', 'The year.')
+@api.param('year', 'The year you wish to get county sale statistics for.')
 @api.response(404, 'Property not found')
 class Property(Resource):
     @api.doc('get_property')

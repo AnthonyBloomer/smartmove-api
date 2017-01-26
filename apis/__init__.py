@@ -1,8 +1,8 @@
 from flask_restplus import Api
 
-from .properties import api as ns1
-from .counties import api as ns2
-from .charts import api as ns3
+from .properties import api as properties
+from .counties import api as counties
+from .charts import api as charts
 
 api = Api(
     title='Smartmove API',
@@ -10,6 +10,6 @@ api = Api(
     description='A REST API to get property price statistics in Ireland and the UK.',
 )
 
-api.add_namespace(ns1)
-api.add_namespace(ns2)
-api.add_namespace(ns3)
+api.add_namespace(properties)
+api.add_namespace(counties)
+api.add_namespace(charts)
