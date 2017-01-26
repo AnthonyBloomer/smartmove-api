@@ -32,9 +32,9 @@ class PropertyList(Resource):
               "limit %s, %s"
 
         if request.args.get('sale_type'):
-            if request.args.get('sale_type') > 2:
+            sale_type = int(request.args.get('sale_type'))
+            if sale_type > 2:
                 api.abort(404)
-            sale_type = request.args.get('sale_type')
 
         params.append(sale_type)
 
