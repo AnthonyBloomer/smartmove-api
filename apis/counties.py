@@ -27,7 +27,7 @@ class PropertyList(Resource):
     @api.doc('list_county_statistics')
     @api.marshal_list_with(county)
     def get(self):
-        sort_by = 'id'
+        sort_by = 'f.id'
         sort_order = 'asc'
 
         if request.args.get('sort_by'):
