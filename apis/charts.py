@@ -1,5 +1,6 @@
 from flask_restplus import Namespace, Resource
 from core.connection import conn
+from core.utils import paginate
 import gviz_api
 import json
 
@@ -44,5 +45,27 @@ class Pie(Resource):
         data_table = gviz_api.DataTable([("Number of Sales", "number"), ("County", "String")])
         data_table.LoadData(data)
         json_str = data_table.ToJSon(columns_order=("County", "Number of Sales"), order_by="County")
+        parsed_json = json.loads(json_str)
+        return parsed_json
+
+
+@api.route('/table')
+@api.param('offset', 'The page number.')
+@api.param('sale_type', 'The sale type')
+class Table(Resource):
+    def get(self):
+        params = []
+        sql = 'select town_name, average_sale_price from fact_town limit %s, %s'
+        for d in paginate():
+            params.append(d)
+        with conn.cursor() as cursor:
+            cursor.execute(sql, params)
+        data = cursor.fetchall()
+        if not data:
+            api.abort(404)
+        data = [tuple(d.values()) for d in data]
+        data_table = gviz_api.DataTable([("Average Sale Price", "number"), ("Town", "String")])
+        data_table.LoadData(data)
+        json_str = data_table.ToJSon(columns_order=("Town", "Average Sale Price"), order_by="Town")
         parsed_json = json.loads(json_str)
         return parsed_json

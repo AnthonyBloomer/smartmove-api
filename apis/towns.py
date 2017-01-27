@@ -1,6 +1,7 @@
 from flask_restplus import Namespace, Resource, fields
 from core.connection import conn
 from flask import request
+from core.utils import paginate
 
 api = Namespace('towns', description='Get property sale statistics for each town.')
 
@@ -19,6 +20,7 @@ class PropertyList(Resource):
     @api.doc('list_town_statistics')
     @api.marshal_list_with(town)
     def get(self):
+        params = []
         sort_by = 'id'
         sort_order = 'asc'
 
@@ -28,9 +30,16 @@ class PropertyList(Resource):
         if request.args.get('sort_order'):
             sort_order = 'desc' if request.args.get('sort_order') == 'desc' else 'asc'
 
-        sql = "select * from fact_town order by %s %s" % (sort_by, sort_order)
+        sql = "select * from fact_town order by %s %s " % (sort_by, sort_order)
+        sql += "limit %s, %s;"
+
+        print sql
+
+        for d in paginate():
+            params.append(d)
+
         with conn.cursor() as cursor:
-            cursor.execute(sql)
+            cursor.execute(sql, params)
         data = cursor.fetchall()
         return data if data else api.abort(404)
 

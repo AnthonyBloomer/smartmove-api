@@ -2,7 +2,7 @@
  * Created by anthonybloomer on 27/01/2017.
  */
 
-google.load('visualization', '1.0', {'packages': ['corechart'], 'callback': drawCharts});
+google.load('visualization', '1.0', {'packages': ['corechart', 'table'], 'callback': drawCharts});
 
 function drawPie() {
     var json = $.ajax({
@@ -21,9 +21,7 @@ function drawPie() {
     chart.draw(data, options);
 }
 
-function drawChart(q) {
-    q = q || "Dublin";
-    $(".title").html(q);
+function drawChart() {
     var json = $.ajax({
         url: "http://127.0.0.1:5000/gcharts/dublin",
         dataType: "json",
@@ -32,7 +30,7 @@ function drawChart(q) {
 
     var data = new google.visualization.DataTable(json);
     var options = {
-        title: q + ' Average Sale Price',
+        title: 'Average Sale Price',
         hAxis: {title: 'Year'},
         vAxis: {title: 'Average Sale Price'},
         legend: 'none'
@@ -42,12 +40,21 @@ function drawChart(q) {
     chart.draw(data, options);
 }
 
-function getTableData(){
-    
+function getTableData() {
+    var json = $.ajax({
+        url: "http://127.0.0.1:5000/gcharts/table",
+        dataType: "json",
+        async: false
+    }).responseText;
+    console.log(json);
+    var data = new google.visualization.DataTable(json);
+    var table = new google.visualization.Table(document.getElementById('table'));
+    table.draw(data, {showRowNumber: true, width: '100%', height: '100%'});
 }
 
 function drawCharts() {
     drawChart();
     drawPie();
+    getTableData();
 }
 
