@@ -16,7 +16,7 @@ def paginate():
 
 
 def gviz_json(columns_order, order_by, desc, data):
-    data = [tuple(data.values()) for data in data]
+    data = [tuple(d.values()) for d in data]
     data_table = gviz_api.DataTable(desc)
     data_table.LoadData(data)
     json_str = data_table.ToJSon(columns_order=columns_order, order_by=order_by)
