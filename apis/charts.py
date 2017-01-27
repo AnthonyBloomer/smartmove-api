@@ -33,7 +33,7 @@ class Chart(Resource):
 @api.route('/pie')
 class Pie(Resource):
     def get(self):
-        sql = 'select d.county_name, f.total_number_of_sales from fact_county as f ' \
+        sql = 'select d.county_name, f.average_sale_price from fact_county as f ' \
               'inner join dim_county as d on d.id = f.county_id'
         with conn.cursor() as cursor:
             cursor.execute(sql)
