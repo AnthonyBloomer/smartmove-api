@@ -1,11 +1,12 @@
 from flask_restplus import Namespace, Resource
 from core.connection import conn
 import gviz_api
+import json
 
-api = Namespace('chart', description='Return the average sale price over time for a given county.')
+api = Namespace('gcharts', description='Google charts')
 
 
-@api.route('/<county_name>', doc=False)
+@api.route('/<county_name>')
 @api.param('county_name', 'The county name.')
 @api.response(404, 'Property not found')
 class Chart(Resource):
@@ -25,4 +26,23 @@ class Chart(Resource):
         data_table = gviz_api.DataTable([("Number of Sales", "number"), ("Year", "String")])
         data_table.LoadData(data)
         json_str = data_table.ToJSon(columns_order=("Year", "Number of Sales"), order_by="Year")
-        return json_str
+        parsed_json = json.loads(json_str)
+        return parsed_json
+
+
+@api.route('/pie')
+class Pie(Resource):
+    def get(self):
+        sql = 'select d.county_name, f.total_number_of_sales from fact_county as f ' \
+              'inner join dim_county as d on d.id = f.county_id'
+        with conn.cursor() as cursor:
+            cursor.execute(sql)
+        data = cursor.fetchall()
+        if not data:
+            api.abort(404)
+        data = [tuple(d.values()) for d in data]
+        data_table = gviz_api.DataTable([("Number of Sales", "number"), ("County", "String")])
+        data_table.LoadData(data)
+        json_str = data_table.ToJSon(columns_order=("County", "Number of Sales"), order_by="County")
+        parsed_json = json.loads(json_str)
+        return parsed_json

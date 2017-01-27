@@ -86,6 +86,7 @@
 
     <div class="row">
         <div class="col-md-8">
+            <div id="piechart"></div>
             <div id="chart_div"></div>
         </div>
     </div>
@@ -105,11 +106,29 @@
         return s && s[0].toUpperCase() + s.slice(1);
     }
 
+    function drawPie() {
+        var json = $.ajax({
+            url: "http://127.0.0.1:5000/gcharts/pie",
+            dataType: "json",
+            async: false
+        }).responseText;
+
+        var data = new google.visualization.DataTable(json);
+
+        var options = {
+            title: 'Average sale price'
+        };
+
+        var chart = new google.visualization.PieChart(document.getElementById('piechart'));
+
+        chart.draw(data, options);
+    }
+
     function drawChart(q) {
         q = q || "Dublin";
         $(".title").html(q);
         var json = $.ajax({
-            url: "http://127.0.0.1:5000/chart/dublin",
+            url: "http://127.0.0.1:5000/gcharts/dublin",
             dataType: "json",
             async: false
         }).responseText;
@@ -142,7 +161,7 @@
         drawChart();
     });
 
-    google.charts.setOnLoadCallback(drawChart);
+    google.charts.setOnLoadCallback(drawPie);
 
 
 </script>
