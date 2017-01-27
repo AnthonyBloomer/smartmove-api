@@ -1,8 +1,6 @@
 from flask_restplus import Namespace, Resource
 from core.connection import conn
-from core.utils import paginate
-import gviz_api
-import json
+from core.utils import paginate, gviz_json
 
 api = Namespace('gcharts', description='Google charts')
 
@@ -23,12 +21,12 @@ class Chart(Resource):
         data = cursor.fetchall()
         if not data:
             api.abort(404)
-        data = [tuple(d.values()) for d in data]
-        data_table = gviz_api.DataTable([("Number of Sales", "number"), ("Year", "String")])
-        data_table.LoadData(data)
-        json_str = data_table.ToJSon(columns_order=("Year", "Number of Sales"), order_by="Year")
-        parsed_json = json.loads(json_str)
-        return parsed_json
+        return gviz_json(
+            columns_order=("Year", "Number of Sales"),
+            order_by="Year",
+            desc=[("Number of Sales", "number"), ("Year", "String")],
+            data=data
+        )
 
 
 @api.route('/pie')
@@ -41,12 +39,12 @@ class Pie(Resource):
         data = cursor.fetchall()
         if not data:
             api.abort(404)
-        data = [tuple(d.values()) for d in data]
-        data_table = gviz_api.DataTable([("Number of Sales", "number"), ("County", "String")])
-        data_table.LoadData(data)
-        json_str = data_table.ToJSon(columns_order=("County", "Number of Sales"), order_by="County")
-        parsed_json = json.loads(json_str)
-        return parsed_json
+        return gviz_json(
+            columns_order=("County", "Number of Sales"),
+            order_by="County",
+            desc=[("Number of Sales", "number"), ("County", "String")],
+            data=data
+        )
 
 
 @api.route('/table')
@@ -63,9 +61,12 @@ class Table(Resource):
         data = cursor.fetchall()
         if not data:
             api.abort(404)
-        data = [tuple(d.values()) for d in data]
-        data_table = gviz_api.DataTable([("Average Sale Price", "number"), ("Town", "String")])
-        data_table.LoadData(data)
-        json_str = data_table.ToJSon(columns_order=("Town", "Average Sale Price"), order_by="Town")
-        parsed_json = json.loads(json_str)
-        return parsed_json
+        return gviz_json(
+            columns_order=("Town", "Average Sale Price"),
+            order_by="Town",
+            desc=[("Average Sale Price", "number"), ("Town", "String")],
+            data=data
+        )
+
+
+
