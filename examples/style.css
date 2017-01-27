@@ -1,0 +1,4 @@
+#chart_div, #piechart {
+    width: 100%;
+    min-height: 500px;
+}

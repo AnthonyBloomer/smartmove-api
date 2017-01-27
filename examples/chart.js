@@ -2,17 +2,7 @@
  * Created by anthonybloomer on 27/01/2017.
  */
 
-google.charts.load('current', {'packages': ['corechart']});
-
-$("#submit").click(function (e) {
-    e.preventDefault();
-    var t = $('#text').val();
-    drawChart(capitalize(t));
-});
-
-function capitalize(s) {
-    return s && s[0].toUpperCase() + s.slice(1);
-}
+google.load('visualization', '1.0', {'packages': ['corechart'], 'callback': drawCharts});
 
 function drawPie() {
     var json = $.ajax({
@@ -28,7 +18,6 @@ function drawPie() {
     };
 
     var chart = new google.visualization.PieChart(document.getElementById('piechart'));
-
     chart.draw(data, options);
 }
 
@@ -40,9 +29,6 @@ function drawChart(q) {
         dataType: "json",
         async: false
     }).responseText;
-
-    json = jQuery.parseJSON(json);
-
 
     var data = new google.visualization.DataTable(json);
     var options = {
@@ -56,12 +42,12 @@ function drawChart(q) {
     chart.draw(data, options);
 }
 
-$(window).resize(function () {
-    drawChart();
-});
+function getTableData(){
+    
+}
 
-$(window).load(function (){
-   drawChart();
-   drawPie();
-});
+function drawCharts() {
+    drawChart();
+    drawPie();
+}
 
