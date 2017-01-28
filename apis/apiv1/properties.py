@@ -27,7 +27,7 @@ class PropertyList(Resource):
     def get(self):
         params = []
         sale_type = 1
-        sql = "select p.id, p.address, p.date_time, p.description, p.price, c.county_name from smartmove.properties as p " \
+        sql = "select p.id, p.address, p.sale_type, p.date_time, p.description, p.price, c.county_name from smartmove.properties as p " \
               "left join smartmove.counties as c " \
               "on p.county_id = c.id " \
               "where p.sale_type = %s " \

@@ -1,10 +1,10 @@
 from flask_restplus import Api
 
-from .properties import api as properties
-from .counties import api as counties
-from .charts import api as charts
-from .countries import api as countries
-from .towns import api as towns
+from apis.apiv1.towns import api as towns
+from apis.apiv1.charts import api as charts
+from apis.apiv1.counties import api as counties
+from apis.apiv1.countries import api as countries
+from apis.apiv1.properties import api as properties
 
 api = Api(
     title='Smartmove API',
