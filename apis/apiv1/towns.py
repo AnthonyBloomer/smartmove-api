@@ -16,7 +16,7 @@ town = api.model('Town', {
 @api.route('/')
 @api.param('sort_by', 'The sort type.')
 @api.param('sort_order', 'The sort order.')
-class PropertyList(Resource):
+class Town(Resource):
     @api.doc('list_town_statistics')
     @api.marshal_list_with(town)
     def get(self):
@@ -47,7 +47,7 @@ class PropertyList(Resource):
 @api.route('/<id>')
 @api.param('id', 'The property identifier')
 @api.response(404, 'Town not found')
-class Property(Resource):
+class GetTownById(Resource):
     @api.doc('get_property')
     @api.marshal_with(town)
     def get(self, id):

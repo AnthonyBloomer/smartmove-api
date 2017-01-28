@@ -47,7 +47,7 @@ class PropertyList(Resource):
 @api.route('/<id>')
 @api.param('id', 'The property identifier')
 @api.response(404, 'Property not found')
-class Property(Resource):
+class County(Resource):
     @api.doc('get_property')
     @api.marshal_with(county)
     def get(self, id):
@@ -62,7 +62,7 @@ class Property(Resource):
 @api.param('county_name', 'The county name.')
 @api.param('year', 'The year you wish to get county sale statistics for.')
 @api.response(404, 'Property not found')
-class Property(Resource):
+class GetCountyById(Resource):
     @api.doc('get_property')
     @api.marshal_with(year_stats)
     def get(self, county_name, year):

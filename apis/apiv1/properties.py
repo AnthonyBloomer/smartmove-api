@@ -21,7 +21,7 @@ property = api.model('Property', {
 @api.param('offset', 'The page number.')
 @api.param('sale_type', 'The sale type')
 @api.response(404, 'Invalid sale type.')
-class PropertyList(Resource):
+class Property(Resource):
     @api.doc('list_properties')
     @api.marshal_list_with(property)
     def get(self):
@@ -52,7 +52,7 @@ class PropertyList(Resource):
 @api.route('/<id>')
 @api.param('id', 'The property identifier')
 @api.response(404, 'Property not found')
-class Property(Resource):
+class GetPropertyById(Resource):
     @api.doc('get_property')
     @api.marshal_with(property)
     def get(self, id):

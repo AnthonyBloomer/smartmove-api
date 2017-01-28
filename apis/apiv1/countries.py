@@ -12,7 +12,7 @@ country = api.model('Country', {
 
 
 @api.route('/')
-class PropertyList(Resource):
+class Country(Resource):
     @api.doc('list_country_statistics')
     @api.marshal_list_with(country)
     def get(self):
@@ -26,7 +26,7 @@ class PropertyList(Resource):
 @api.route('/<id>')
 @api.param('id', 'The country identifier')
 @api.response(404, 'Property not found')
-class Property(Resource):
+class GetCountyById(Resource):
     @api.doc('get_property')
     @api.marshal_with(country)
     def get(self, id):
