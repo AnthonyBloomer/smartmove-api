@@ -33,8 +33,6 @@ class Town(Resource):
         sql = "select * from fact_town order by %s %s " % (sort_by, sort_order)
         sql += "limit %s, %s;"
 
-        print sql
-
         for d in paginate():
             params.append(d)
 

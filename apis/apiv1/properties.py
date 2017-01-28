@@ -70,7 +70,7 @@ class GetPropertyById(Resource):
 @api.param('search_term', 'The search query')
 @api.param('sale_type', 'The sale type')
 @api.response(404, 'No results found')
-class Search(Resource):
+class PropertySearch(Resource):
     @api.doc('search')
     @api.marshal_with(property)
     def get(self, search_term):

@@ -23,7 +23,7 @@ year_stats = api.model('Year', {
 @api.route('/')
 @api.param('sort_by', 'The sort type.')
 @api.param('sort_order', 'The sort order.')
-class PropertyList(Resource):
+class County(Resource):
     @api.doc('list_county_statistics')
     @api.marshal_list_with(county)
     def get(self):
@@ -47,7 +47,7 @@ class PropertyList(Resource):
 @api.route('/<id>')
 @api.param('id', 'The property identifier')
 @api.response(404, 'Property not found')
-class County(Resource):
+class GetCountyById(Resource):
     @api.doc('get_property')
     @api.marshal_with(county)
     def get(self, id):
@@ -62,7 +62,7 @@ class County(Resource):
 @api.param('county_name', 'The county name.')
 @api.param('year', 'The year you wish to get county sale statistics for.')
 @api.response(404, 'Property not found')
-class GetCountyById(Resource):
+class YearSalesForCounties(Resource):
     @api.doc('get_property')
     @api.marshal_with(year_stats)
     def get(self, county_name, year):
