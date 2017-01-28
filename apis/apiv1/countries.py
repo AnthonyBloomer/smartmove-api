@@ -27,7 +27,7 @@ class Country(Resource):
 @api.param('id', 'The country identifier')
 @api.response(404, 'Property not found')
 class GetCountyById(Resource):
-    @api.doc('get_property')
+    @api.doc('get_country_by_id')
     @api.marshal_with(country)
     def get(self, id):
         sql = "select * from fact_country as f join dim_country as c on f.country_id = c.id where f.id = %s"

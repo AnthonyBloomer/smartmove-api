@@ -53,7 +53,7 @@ class Property(Resource):
 @api.param('id', 'The property identifier')
 @api.response(404, 'Property not found')
 class GetPropertyById(Resource):
-    @api.doc('get_property')
+    @api.doc('get_country_by_id')
     @api.marshal_with(property)
     def get(self, id):
         sql = "select * from smartmove.properties as p " \
@@ -68,6 +68,7 @@ class GetPropertyById(Resource):
 
 @api.route('/search/<search_term>')
 @api.param('search_term', 'The search query')
+@api.param('offset', 'The page number.')
 @api.param('sale_type', 'The sale type')
 @api.response(404, 'No results found')
 class PropertySearch(Resource):

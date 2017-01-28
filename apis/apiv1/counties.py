@@ -1,6 +1,7 @@
 from flask_restplus import Namespace, Resource, fields
 from core.connection import conn
 from flask import request
+from core.utils import paginate
 
 api = Namespace('counties', description='Get property sale statistics for each county')
 
@@ -61,15 +62,21 @@ class GetCountyById(Resource):
 @api.route('/<county_name>/<year>')
 @api.param('county_name', 'The county name.')
 @api.param('year', 'The year you wish to get county sale statistics for.')
+@api.param('sale_type', 'The sale type.')
 @api.response(404, 'Property not found')
 class YearSalesForCounties(Resource):
-    @api.doc('get_property')
+    @api.doc('get_year_sales_for_counties')
     @api.marshal_with(year_stats)
     def get(self, county_name, year):
-        # Get yearly sale statistics for the given county.
+        params = [county_name, year]
         sql = "select * from fact_year as f " \
-              "join dim_county as d on d.id = f.county_id where county_name like %s and year = %s "
+              "join dim_county as d on d.id = f.county_id " \
+              "where county_name like %s and year = %s limit %s, %s"
+
+        for d in paginate():
+            params.append(d)
+
         with conn.cursor() as cursor:
-            cursor.execute(sql, [county_name, year])
+            cursor.execute(sql, params)
         y = cursor.fetchall()
         return y if y else api.abort(404)

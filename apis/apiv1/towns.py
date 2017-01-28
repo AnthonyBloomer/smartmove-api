@@ -46,7 +46,7 @@ class Town(Resource):
 @api.param('id', 'The property identifier')
 @api.response(404, 'Town not found')
 class GetTownById(Resource):
-    @api.doc('get_property')
+    @api.doc('get_town_by_id')
     @api.marshal_with(town)
     def get(self, id):
         sql = "select * from fact_town where id = %s"
