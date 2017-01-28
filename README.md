@@ -1,5 +1,5 @@
-# smartmove
-A RESTful API to retrieve property price statistics in Ireland and the UK
+# smartmove API
+A RESTful API to retrieve property price statistics in Ireland and the UK.
 
 ## Installation
 
