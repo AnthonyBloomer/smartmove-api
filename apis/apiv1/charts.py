@@ -2,7 +2,7 @@ from flask_restplus import Namespace, Resource
 from core.connection import conn
 from core.utils import paginate, gviz_json
 
-api = Namespace('gcharts', description='Google charts')
+api = Namespace('charts', description='Google Charts')
 
 
 @api.route('/<county_name>')
