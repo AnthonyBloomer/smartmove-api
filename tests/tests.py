@@ -18,7 +18,8 @@ class PropertyTest(ApiTest):
         self.assertTrue(r['county_name'], 'Dublin')
 
     def test_property_search(self):
-        r = self.call('properties/search/blanchardstown')
+        r = self.call('properties/search/ballivor')
+        print r.json()
         self.assertTrue(r.status_code, 200)
 
 

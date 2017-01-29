@@ -36,7 +36,7 @@ class Property(Resource):
 
         if request.args.get('sale_type'):
             sale_type = int(request.args.get('sale_type'))
-            if sale_type > 2:
+            if sale_type > 4:
                 api.abort(404)
 
         params.append(sale_type)
@@ -48,6 +48,8 @@ class Property(Resource):
             cursor.execute(sql, params)
         data = cursor.fetchall()
         return data
+
+
 
 
 @api.route('/<id>')

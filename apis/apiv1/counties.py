@@ -9,7 +9,11 @@ county = api.model('County', {
     'id': fields.String(required=True, description='The county identifier'),
     'county_name': fields.String(required=True, description='The county name.'),
     'average_sale_price': fields.String(description='The average sale price.'),
-    'total_number_of_sales': fields.String(description="The total number of sales.")
+    'average_rent_price': fields.String(description='The average sale price.'),
+    'total_number_of_sales': fields.String(description="The total number of sales."),
+    'total_properties_for_rent': fields.String(description="The total number of properties for rent."),
+    'max_rent_price': fields.String(description="The current max rent price"),
+    'min_rent_price': fields.String(description="The current min rent price"),
 })
 
 year_stats = api.model('Year', {
@@ -38,7 +42,9 @@ class County(Resource):
             sort_order = 'desc' if request.args.get('sort_order') == 'desc' else 'asc'
 
         sql = "select * from fact_county as f " \
-              "join dim_county as c on f.county_id = c.id order by %s %s" % (sort_by, sort_order)
+              "join dim_county as c on f.county_id = c.id " \
+              "join fact_rent as fr on fr.county_id = c.id " \
+              "order by %s %s" % (sort_by, sort_order)
         with conn.cursor() as cursor:
             cursor.execute(sql)
         data = cursor.fetchall()
