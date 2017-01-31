@@ -88,6 +88,8 @@ class GetPropertyById(Resource):
 @api.param('search_term', 'The search query')
 @api.param('offset', 'The page number.')
 @api.param('sale_type', 'The sale type')
+@api.param('from_date', 'The from date')
+@api.param('to_date', 'The to date')
 @api.response(404, 'No results found')
 class PropertySearch(Resource):
     @api.doc('search')
@@ -95,11 +97,15 @@ class PropertySearch(Resource):
     def get(self, search_term):
         sale_type = 1
         params = []
+        now = datetime.datetime.now()
+        from_date = '2010'
+        to_date = now.year
         sql = "select * from smartmove.properties as p " \
               "join smartmove.counties as c " \
               "on p.county_id = c.id " \
               "where p.address like %s " \
               "and sale_type = %s " \
+              "and year(date_time) BETWEEN %s AND %s " \
               "limit %s, %s"
 
         params.append(('%' + unquote_plus(search_term) + '%'))
@@ -110,6 +116,15 @@ class PropertySearch(Resource):
                 api.abort(404)
 
         params.append(sale_type)
+
+        if request.args.get('from_date'):
+            from_date = request.args.get('from_date')
+
+        if request.args.get('to_date'):
+            to_date = request.args.get('to_date')
+
+        params.append(from_date)
+        params.append(to_date)
 
         for d in paginate():
             params.append(d)
