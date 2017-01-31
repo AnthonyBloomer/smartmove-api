@@ -23,6 +23,7 @@ property = api.model('Property', {
 @api.param('offset', 'The page number.')
 @api.param('api_key', 'Your API key.')
 @api.param('sale_type', 'The sale type')
+@api.param('country_id', 'The country identifier')
 @api.param('from_date', 'The from date')
 @api.param('to_date', 'The to date')
 @api.response(404, 'Invalid sale type.')
@@ -33,6 +34,7 @@ class Property(Resource):
     def get(self):
         params = []
         sale_type = 1
+        country_id = 1
         now = datetime.datetime.now()
         from_date = '2010'
         to_date = now.year
@@ -45,6 +47,7 @@ class Property(Resource):
                   "on p.county_id = c.id " \
                   "where p.sale_type = %s " \
                   "and year(date_time) BETWEEN %s AND %s " \
+                  "and p.country_id = %s " \
                   "limit %s, %s"
 
             if request.args.get('sale_type'):
@@ -62,6 +65,11 @@ class Property(Resource):
 
             params.append(from_date)
             params.append(to_date)
+
+            if request.args.get('country_id'):
+                country_id = request.args.get('country_id')
+
+            params.append(country_id)
 
             for d in paginate():
                 params.append(d)
@@ -100,6 +108,7 @@ class GetPropertyById(Resource):
 
 @api.route('/search/<search_term>')
 @api.param('search_term', 'The search query')
+@api.param('country_id', 'The country identifier')
 @api.param('offset', 'The page number.')
 @api.param('api_key', 'Your API key.')
 @api.param('sale_type', 'The sale type')
@@ -114,6 +123,7 @@ class PropertySearch(Resource):
         if request.args.get('api_key') and validate_key(request.args.get('api_key')):
 
             sale_type = 1
+            country_id = 1
             params = []
             now = datetime.datetime.now()
             from_date = '2010'
@@ -124,6 +134,7 @@ class PropertySearch(Resource):
                   "where p.address like %s " \
                   "and sale_type = %s " \
                   "and year(date_time) BETWEEN %s AND %s " \
+                  "and p.country_id = %s " \
                   "limit %s, %s"
 
             params.append(('%' + unquote_plus(search_term) + '%'))
@@ -143,6 +154,11 @@ class PropertySearch(Resource):
 
             params.append(from_date)
             params.append(to_date)
+
+            if request.args.get('country_id'):
+                country_id = request.args.get('country_id')
+
+            params.append(country_id)
 
             for d in paginate():
                 params.append(d)
