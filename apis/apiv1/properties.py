@@ -3,6 +3,7 @@ from core.utils import paginate
 from flask import request
 from core.connection import conn
 from urllib import unquote_plus
+import datetime
 
 api = Namespace('properties', description='Property related operations')
 
@@ -20,6 +21,8 @@ property = api.model('Property', {
 @api.route('/')
 @api.param('offset', 'The page number.')
 @api.param('sale_type', 'The sale type')
+@api.param('from_date', 'The from date')
+@api.param('to_date', 'The to date')
 @api.response(404, 'Invalid sale type.')
 class Property(Resource):
     @api.doc('list_properties')
@@ -27,11 +30,16 @@ class Property(Resource):
     def get(self):
         params = []
         sale_type = 1
+        now = datetime.datetime.now()
+        from_date = '2010'
+        to_date = now.year
+
         sql = "select p.id, p.address, p.sale_type, p.date_time, p.description, p.price, c.county_name " \
               "from smartmove.properties as p " \
               "left join smartmove.counties as c " \
               "on p.county_id = c.id " \
               "where p.sale_type = %s " \
+              "and year(date_time) BETWEEN %s AND %s " \
               "limit %s, %s"
 
         if request.args.get('sale_type'):
@@ -41,15 +49,22 @@ class Property(Resource):
 
         params.append(sale_type)
 
+        if request.args.get('from_date'):
+            from_date = request.args.get('from_date')
+
+        if request.args.get('to_date'):
+            to_date = request.args.get('to_date')
+
+        params.append(from_date)
+        params.append(to_date)
+
         for d in paginate():
             params.append(d)
 
         with conn.cursor() as cursor:
             cursor.execute(sql, params)
         data = cursor.fetchall()
-        return data
-
-
+        return data if data else api.abort(404)
 
 
 @api.route('/<id>')
@@ -84,7 +99,7 @@ class PropertySearch(Resource):
               "join smartmove.counties as c " \
               "on p.county_id = c.id " \
               "where p.address like %s " \
-              "and sale_type = %s "\
+              "and sale_type = %s " \
               "limit %s, %s"
 
         params.append(('%' + unquote_plus(search_term) + '%'))
