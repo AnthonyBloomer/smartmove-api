@@ -47,7 +47,6 @@ class County(Resource):
 
             sql = "select * from fact_county as f " \
                   "join dim_county as c on f.county_id = c.id " \
-                  "join fact_rent as fr on fr.county_id = c.id " \
                   "order by %s %s" % (sort_by, sort_order)
             with conn.cursor() as cursor:
                 cursor.execute(sql)

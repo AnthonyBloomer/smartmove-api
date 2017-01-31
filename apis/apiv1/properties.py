@@ -163,6 +163,7 @@ class PropertySearch(Resource):
             for d in paginate():
                 params.append(d)
 
+            print params
             with conn.cursor() as cursor:
                 cursor.execute(sql, params)
             data = cursor.fetchall()

@@ -4,14 +4,19 @@ import requests
 
 class ApiTest(unittest.TestCase):
     _base = 'http://127.0.0.1:5000/'
+    api_key = '5890d9bf7e5b3'
 
     def call(self, method, params=None):
-        return requests.get(url=self._base + method, params=params)
+        params = {
+            'api_key': self.api_key
+        }
+        req = requests.get(url=self._base + method, params=params)
+        return req
 
 
 class PropertyTest(ApiTest):
     def test_properties(self):
-        self.assertTrue(self.call('properties').status_code, 200)
+        self.assertTrue(self.call('properties/').status_code, 200)
 
     def test_property_by_id(self):
         r = self.call('properties/6').json()
@@ -19,7 +24,7 @@ class PropertyTest(ApiTest):
 
     def test_property_search(self):
         r = self.call('properties/search/ballivor')
-        print r.json()
+        print r.url
         self.assertTrue(r.status_code, 200)
 
 
