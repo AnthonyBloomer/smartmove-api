@@ -26,6 +26,7 @@ property = api.model('Property', {
 @api.param('from_date', 'The from date')
 @api.param('to_date', 'The to date')
 @api.response(404, 'Invalid sale type.')
+@api.response(401, 'Invalid API key.')
 class Property(Resource):
     @api.doc('list_properties')
     @api.marshal_list_with(property)
@@ -75,67 +76,81 @@ class Property(Resource):
 
 @api.route('/<id>')
 @api.param('id', 'The property identifier')
+@api.param('api_key', 'Your API key.')
 @api.response(404, 'Property not found')
+@api.response(401, 'Invalid API key.')
 class GetPropertyById(Resource):
     @api.doc('get_country_by_id')
     @api.marshal_with(property)
     def get(self, id):
-        sql = "select * from smartmove.properties as p " \
-              "join smartmove.counties as c " \
-              "on p.county_id = c.id " \
-              "where p.id = %s"
-        with conn.cursor() as cursor:
-            cursor.execute(sql, id)
-        data = cursor.fetchone()
-        return data if data else api.abort(404)
+        if request.args.get('api_key') and validate_key(request.args.get('api_key')):
+
+            sql = "select * from smartmove.properties as p " \
+                  "join smartmove.counties as c " \
+                  "on p.county_id = c.id " \
+                  "where p.id = %s"
+            with conn.cursor() as cursor:
+                cursor.execute(sql, id)
+            data = cursor.fetchone()
+            return data if data else api.abort(404)
+
+        else:
+            api.abort(401)
 
 
 @api.route('/search/<search_term>')
 @api.param('search_term', 'The search query')
 @api.param('offset', 'The page number.')
+@api.param('api_key', 'Your API key.')
 @api.param('sale_type', 'The sale type')
 @api.param('from_date', 'The from date')
 @api.param('to_date', 'The to date')
 @api.response(404, 'No results found')
+@api.response(401, 'Invalid API key.')
 class PropertySearch(Resource):
     @api.doc('search')
     @api.marshal_with(property)
     def get(self, search_term):
-        sale_type = 1
-        params = []
-        now = datetime.datetime.now()
-        from_date = '2010'
-        to_date = now.year
-        sql = "select * from smartmove.properties as p " \
-              "join smartmove.counties as c " \
-              "on p.county_id = c.id " \
-              "where p.address like %s " \
-              "and sale_type = %s " \
-              "and year(date_time) BETWEEN %s AND %s " \
-              "limit %s, %s"
+        if request.args.get('api_key') and validate_key(request.args.get('api_key')):
 
-        params.append(('%' + unquote_plus(search_term) + '%'))
+            sale_type = 1
+            params = []
+            now = datetime.datetime.now()
+            from_date = '2010'
+            to_date = now.year
+            sql = "select * from smartmove.properties as p " \
+                  "join smartmove.counties as c " \
+                  "on p.county_id = c.id " \
+                  "where p.address like %s " \
+                  "and sale_type = %s " \
+                  "and year(date_time) BETWEEN %s AND %s " \
+                  "limit %s, %s"
 
-        if request.args.get('sale_type'):
-            sale_type = int(request.args.get('sale_type'))
-            if sale_type > 2:
-                api.abort(404)
+            params.append(('%' + unquote_plus(search_term) + '%'))
 
-        params.append(sale_type)
+            if request.args.get('sale_type'):
+                sale_type = int(request.args.get('sale_type'))
+                if sale_type > 2:
+                    api.abort(404)
 
-        if request.args.get('from_date'):
-            from_date = request.args.get('from_date')
+            params.append(sale_type)
 
-        if request.args.get('to_date'):
-            to_date = request.args.get('to_date')
+            if request.args.get('from_date'):
+                from_date = request.args.get('from_date')
 
-        params.append(from_date)
-        params.append(to_date)
+            if request.args.get('to_date'):
+                to_date = request.args.get('to_date')
 
-        for d in paginate():
-            params.append(d)
+            params.append(from_date)
+            params.append(to_date)
 
-        with conn.cursor() as cursor:
-            cursor.execute(sql, params)
-        data = cursor.fetchall()
-        return data if data else api.abort(404)
+            for d in paginate():
+                params.append(d)
+
+            with conn.cursor() as cursor:
+                cursor.execute(sql, params)
+            data = cursor.fetchall()
+            return data if data else api.abort(404)
+
+        else:
+            api.abort(401)
