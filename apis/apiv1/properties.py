@@ -1,5 +1,5 @@
 from flask_restplus import Namespace, Resource, fields
-from core.utils import paginate
+from core.utils import paginate, validate_key
 from flask import request
 from core.connection import conn
 from urllib import unquote_plus
@@ -20,6 +20,8 @@ property = api.model('Property', {
 
 @api.route('/')
 @api.param('offset', 'The page number.')
+@api.param('offset', 'The page number.')
+@api.param('api_key', 'Your API key.')
 @api.param('sale_type', 'The sale type')
 @api.param('from_date', 'The from date')
 @api.param('to_date', 'The to date')
@@ -34,37 +36,41 @@ class Property(Resource):
         from_date = '2010'
         to_date = now.year
 
-        sql = "select p.id, p.address, p.sale_type, p.date_time, p.description, p.price, c.county_name " \
-              "from smartmove.properties as p " \
-              "left join smartmove.counties as c " \
-              "on p.county_id = c.id " \
-              "where p.sale_type = %s " \
-              "and year(date_time) BETWEEN %s AND %s " \
-              "limit %s, %s"
+        if request.args.get('api_key') and validate_key(request.args.get('api_key')):
 
-        if request.args.get('sale_type'):
-            sale_type = int(request.args.get('sale_type'))
-            if sale_type > 4:
-                api.abort(404)
+            sql = "select p.id, p.address, p.sale_type, p.date_time, p.description, p.price, c.county_name " \
+                  "from smartmove.properties as p " \
+                  "left join smartmove.counties as c " \
+                  "on p.county_id = c.id " \
+                  "where p.sale_type = %s " \
+                  "and year(date_time) BETWEEN %s AND %s " \
+                  "limit %s, %s"
 
-        params.append(sale_type)
+            if request.args.get('sale_type'):
+                sale_type = int(request.args.get('sale_type'))
+                if sale_type > 4:
+                    api.abort(404)
 
-        if request.args.get('from_date'):
-            from_date = request.args.get('from_date')
+            params.append(sale_type)
 
-        if request.args.get('to_date'):
-            to_date = request.args.get('to_date')
+            if request.args.get('from_date'):
+                from_date = request.args.get('from_date')
 
-        params.append(from_date)
-        params.append(to_date)
+            if request.args.get('to_date'):
+                to_date = request.args.get('to_date')
 
-        for d in paginate():
-            params.append(d)
+            params.append(from_date)
+            params.append(to_date)
 
-        with conn.cursor() as cursor:
-            cursor.execute(sql, params)
-        data = cursor.fetchall()
-        return data if data else api.abort(404)
+            for d in paginate():
+                params.append(d)
+
+            with conn.cursor() as cursor:
+                cursor.execute(sql, params)
+            data = cursor.fetchall()
+            return data if data else api.abort(404)
+        else:
+            api.abort(401)
 
 
 @api.route('/<id>')

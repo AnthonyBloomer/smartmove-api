@@ -1,6 +1,7 @@
 from flask import request
 import gviz_api
 import json
+from .connection import conn
 
 
 def paginate():
@@ -22,3 +23,12 @@ def gviz_json(columns_order, order_by, desc, data):
     json_str = data_table.ToJSon(columns_order=columns_order, order_by=order_by)
     parsed_json = json.loads(json_str)
     return parsed_json
+
+
+def validate_key(api_key):
+    with conn.cursor() as cursor:
+        sql = "SELECT * FROM dashboard.api_keys WHERE api_key = %s"
+        cursor.execute(sql, api_key)
+        result = cursor.fetchone()
+        if result:
+            return True
