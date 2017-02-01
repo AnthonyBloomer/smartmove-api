@@ -19,8 +19,7 @@ property = api.model('Property', {
 
 
 @api.route('/')
-@api.param('offset', 'The page number.')
-@api.param('offset', 'The page number.')
+@api.param('page', 'The page number.')
 @api.param('api_key', 'Your API key.')
 @api.param('sale_type', 'The sale type')
 @api.param('country_id', 'The country identifier')
