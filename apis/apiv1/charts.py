@@ -26,9 +26,9 @@ class Chart(Resource):
             if not data:
                 api.abort(404)
             return gviz_json(
-                columns_order=("Year", "Number of Sales"),
+                columns_order=("Year", "Average Sale Price"),
                 order_by="Year",
-                desc=[("Number of Sales", "number"), ("Year", "String")],
+                desc=[("Average Sale Price", "number"), ("Year", "String")],
                 data=data
             )
         else:
