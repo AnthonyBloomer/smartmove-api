@@ -136,7 +136,8 @@ class PropertySearch(Resource):
                   "and p.country_id = %s " \
                   "limit %s, %s"
 
-            params.append(('%' + unquote_plus(search_term) + '%'))
+            search_term = search_term.split()
+            params.append(('%' + unquote_plus(search_term[0]) + '%'))
 
             if request.args.get('sale_type'):
                 sale_type = int(request.args.get('sale_type'))
