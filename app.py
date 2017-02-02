@@ -9,7 +9,7 @@ api.init_app(app)
 limiter = Limiter(
     app,
     key_func=get_remote_address,
-    global_limits=["2000 per day", "100 per hour", "2 per second"]
+    global_limits=["2000 per day", "100 per hour"]
 )
 
 app.run(debug=True)

@@ -4,11 +4,16 @@
 
 google.load('visualization', '1.0', {'packages': ['corechart', 'table'], 'callback': drawCharts});
 
+var params = {
+    api_key: 'c0acf750-e8d3-11e6-be00-256583c415a5'
+};
+
 function drawPie() {
     var json = $.ajax({
         url: "http://127.0.0.1:5000/gcharts/pie",
         dataType: "json",
-        async: false
+        async: false,
+        data: params
     }).responseText;
 
     var data = new google.visualization.DataTable(json);
@@ -25,7 +30,8 @@ function drawChart() {
     var json = $.ajax({
         url: "http://127.0.0.1:5000/gcharts/dublin",
         dataType: "json",
-        async: false
+        async: false,
+        data: params
     }).responseText;
 
     var data = new google.visualization.DataTable(json);
@@ -44,7 +50,8 @@ function getTableData() {
     var json = $.ajax({
         url: "http://127.0.0.1:5000/gcharts/table",
         dataType: "json",
-        async: false
+        async: false,
+        data: params
     }).responseText;
     console.log(json);
     var data = new google.visualization.DataTable(json);
