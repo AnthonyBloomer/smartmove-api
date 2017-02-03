@@ -64,3 +64,22 @@ class GetTownById(Resource):
             return data if data else api.abort(404)
         else:
             api.abort(401)
+            
+@api.route('/compare')
+@api.param('api_key', 'Your API key.')
+@api.param('town1', 'The town name.')
+@api.param('town2', 'The town you want to compare the first town to.')
+@api.response(401, 'Invalid API key.')
+class Compare(Resource):
+    def get(self):
+        if request.args.get('api_key') and validate_key(request.args.get('api_key')):
+            sql = 'select * from fact_town where town_name like %s or town_name like %s'
+            with conn.cursor() as cursor:
+                cursor.execute(sql, [request.args.get('town1'), request.args.get('town2')])
+            data = cursor.fetchall()
+            if not data:
+                api.abort(404)
+            return data
+
+        else:
+            api.abort(401)

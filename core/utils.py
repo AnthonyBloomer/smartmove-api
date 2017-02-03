@@ -27,8 +27,9 @@ def gviz_json(columns_order, order_by, desc, data):
 
 def validate_key(api_key):
     with conn.cursor() as cursor:
-        sql = "SELECT * FROM dashboard.api_keys WHERE api_key = %s"
+        sql = "SELECT api_key FROM dashboard.api_keys WHERE api_key = %s"
         cursor.execute(sql, api_key)
         result = cursor.fetchone()
         if result:
             return True
+
