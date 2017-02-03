@@ -24,7 +24,6 @@ class PropertyTest(ApiTest):
 
     def test_property_search(self):
         r = self.call('properties/search/ballivor')
-        print r.url
         self.assertTrue(r.status_code, 200)
 
 

@@ -3,7 +3,7 @@ from core.connection import conn
 from core.utils import paginate, gviz_json, validate_key
 from flask import request
 
-api = Namespace('charts', description='Google Charts')
+api = Namespace('charts', description='Get JSON data that can easily be consumed by the Google Charts API.')
 
 
 @api.route('/<county_name>')
