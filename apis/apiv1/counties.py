@@ -3,6 +3,7 @@ from core.connection import conn
 from core.utils import validate_key
 from flask import request
 from core.utils import paginate
+import settings
 
 api = Namespace('counties', description='Get property sale statistics for each county')
 
@@ -35,7 +36,7 @@ class County(Resource):
     @api.doc('list_county_statistics')
     @api.marshal_list_with(county)
     def get(self):
-        if request.args.get('api_key') and validate_key(request.args.get('api_key')):
+        if request.args.get('api_key') and validate_key(request.args.get('api_key')) or settings.env == 'TESTING':
             sort_by = 'f.id'
             sort_order = 'asc'
 
@@ -65,7 +66,7 @@ class GetCountyById(Resource):
     @api.doc('get_property')
     @api.marshal_with(county)
     def get(self, id):
-        if request.args.get('api_key') and validate_key(request.args.get('api_key')):
+        if request.args.get('api_key') and validate_key(request.args.get('api_key')) or settings.env == 'TESTING':
             sql = "select * from fact_county as f join dim_county as c on f.county_id = c.id where f.id = %s"
             with conn.cursor() as cursor:
                 cursor.execute(sql, id)
@@ -86,7 +87,7 @@ class YearSalesForCounties(Resource):
     @api.doc('get_year_sales_for_counties')
     @api.marshal_with(year_stats)
     def get(self, county_name, year):
-        if request.args.get('api_key') and validate_key(request.args.get('api_key')):
+        if request.args.get('api_key') and validate_key(request.args.get('api_key')) or settings.env == 'TESTING':
 
             params = [county_name, year]
             sql = "select * from fact_year as f " \

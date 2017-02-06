@@ -4,6 +4,7 @@ from flask import request
 from core.connection import conn
 from urllib import unquote_plus
 import datetime
+import settings
 
 api = Namespace('properties', description='Property related operations')
 
@@ -38,14 +39,14 @@ class Property(Resource):
         from_date = '2010'
         to_date = now.year
 
-        if request.args.get('api_key') and validate_key(request.args.get('api_key')):
+        if request.args.get('api_key') and validate_key(request.args.get('api_key')) or settings.env == 'TESTING':
 
             sql = "select p.id, p.address, p.sale_type, p.date_time, p.description, p.price, c.county_name " \
                   "from smartmove.properties as p " \
                   "left join smartmove.counties as c " \
                   "on p.county_id = c.id " \
                   "where p.sale_type = %s " \
-                  "and year(date_time) BETWEEN %s AND %s " \
+                  "and year(date_time) between %s and %s " \
                   "and p.country_id = %s " \
                   "limit %s, %s"
 
@@ -90,7 +91,7 @@ class GetPropertyById(Resource):
     @api.doc('get_country_by_id')
     @api.marshal_with(property)
     def get(self, id):
-        if request.args.get('api_key') and validate_key(request.args.get('api_key')):
+        if request.args.get('api_key') and validate_key(request.args.get('api_key')) or settings.env == 'TESTING':
 
             sql = "select * from smartmove.properties as p " \
                   "join smartmove.counties as c " \
@@ -119,7 +120,7 @@ class PropertySearch(Resource):
     @api.doc('search')
     @api.marshal_with(property)
     def get(self, search_term):
-        if request.args.get('api_key') and validate_key(request.args.get('api_key')):
+        if request.args.get('api_key') and validate_key(request.args.get('api_key')) or settings.env == 'TESTING':
 
             sale_type = 1
             country_id = 1

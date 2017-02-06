@@ -2,6 +2,7 @@ from flask_restplus import Namespace, Resource, fields
 from core.connection import conn
 from flask import request
 from core.utils import paginate, validate_key
+import settings
 
 api = Namespace('towns', description='Get property sale statistics for each town.')
 
@@ -22,7 +23,7 @@ class Town(Resource):
     @api.doc('list_town_statistics')
     @api.marshal_list_with(town)
     def get(self):
-        if request.args.get('api_key') and validate_key(request.args.get('api_key')):
+        if request.args.get('api_key') and validate_key(request.args.get('api_key')) or settings.env == 'TESTING':
             params = []
             sort_by = 'id'
             sort_order = 'asc'
@@ -56,7 +57,7 @@ class GetTownById(Resource):
     @api.doc('get_town_by_id')
     @api.marshal_with(town)
     def get(self, id):
-        if request.args.get('api_key') and validate_key(request.args.get('api_key')):
+        if request.args.get('api_key') and validate_key(request.args.get('api_key')) or settings.env == 'TESTING':
             sql = "select * from fact_town where id = %s"
             with conn.cursor() as cursor:
                 cursor.execute(sql, id)
@@ -72,7 +73,7 @@ class GetTownById(Resource):
 @api.response(401, 'Invalid API key.')
 class Compare(Resource):
     def get(self):
-        if request.args.get('api_key') and validate_key(request.args.get('api_key')):
+        if request.args.get('api_key') and validate_key(request.args.get('api_key')) or settings.env == 'TESTING':
             sql = 'select * from fact_town where town_name like %s or town_name like %s'
             with conn.cursor() as cursor:
                 cursor.execute(sql, [request.args.get('town1'), request.args.get('town2')])
