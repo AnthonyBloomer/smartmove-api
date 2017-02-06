@@ -13,7 +13,7 @@ pip install -U https://github.com/anthonybloomer/google-visualization-python/zip
 
 ## Demo
 
-Currently migrating from local machine to Heroku so right now is incomplete. 
+Currently migrating from local machine to Heroku and right now is incomplete.  
 No API key is required to run the API methods.
 
 https://smartmove-api.herokuapp.com
