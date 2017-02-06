@@ -5,6 +5,7 @@ from flask_limiter import Limiter
 from flask_limiter.util import get_remote_address
 
 app = Flask(__name__)
+app.config.SWAGGER_UI_DOC_EXPANSION = 'list'
 api.init_app(app)
 
 limiter = Limiter(
