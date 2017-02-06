@@ -1,7 +1,8 @@
 # smartmove API
 A RESTful API to retrieve property price statistics in Ireland and the UK.
 
-
+You can find the database schema and SQL procedures here:
+https://github.com/AnthonyBloomer/smartmove-load-scripts
 
 ## Installation
 
