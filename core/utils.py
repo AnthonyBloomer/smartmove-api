@@ -1,5 +1,5 @@
 from flask import request
-import gviz_api
+from gvizapi import gviz_api
 import json
 from .connection import conn
 
