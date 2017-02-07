@@ -8,7 +8,6 @@ https://github.com/AnthonyBloomer/smartmove-load-scripts
 
 ```
 pip install -r requirements.txt
-pip install -U https://github.com/anthonybloomer/google-visualization-python/zipball/master
 ```
 
 ## Demo
