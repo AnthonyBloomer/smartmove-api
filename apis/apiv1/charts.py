@@ -18,9 +18,7 @@ class Chart(Resource):
             sql = 'select year, average_sale_price from fact_year as f ' \
                   'join dim_county as d ' \
                   'on d.id = f.county_id ' \
-                  'join dim_property as p ' \
-                  'on d.id = p.id ' \
-                  'where county_name like %s'
+                  'where d.county_name like %s'
             with conn.cursor() as cursor:
                 cursor.execute(sql, county_name)
             data = cursor.fetchall()
@@ -29,7 +27,7 @@ class Chart(Resource):
             return gviz_json(
                 columns_order=("Year", "Average Sale Price"),
                 order_by="Year",
-                desc=[("Average Sale Price", "number"), ("Year", "String")],
+                desc=[("Average Sale Price", "number"), ("Year", "number")],
                 data=data
             )
         else:
@@ -52,7 +50,7 @@ class Pie(Resource):
             return gviz_json(
                 columns_order=("County", "Number of Sales"),
                 order_by="County",
-                desc=[("Number of Sales", "number"), ("County", "String")],
+                desc=[("County", "String"), ("Number of Sales", "number")],
                 data=data
             )
         else:
@@ -60,17 +58,13 @@ class Pie(Resource):
 
 
 @api.route('/table')
-@api.param('offset', 'The page number.')
-@api.param('sale_type', 'The sale type')
 @api.param('api_key', 'Your API key.')
 @api.response(401, 'Invalid API key.')
 class Table(Resource):
     def get(self):
         if request.args.get('api_key') and validate_key(request.args.get('api_key')) or settings.env == 'TESTING':
             params = []
-            sql = 'select town_name, average_sale_price from fact_town limit %s, %s'
-            for d in paginate():
-                params.append(d)
+            sql = 'select town_name, average_sale_price from fact_town'
             with conn.cursor() as cursor:
                 cursor.execute(sql, params)
             data = cursor.fetchall()
@@ -79,7 +73,7 @@ class Table(Resource):
             return gviz_json(
                 columns_order=("Town", "Average Sale Price"),
                 order_by="Town",
-                desc=[("Average Sale Price", "number"), ("Town", "String")],
+                desc=[("Town", "String"), ("Average Sale Price", "number")],
                 data=data
             )
         else:
