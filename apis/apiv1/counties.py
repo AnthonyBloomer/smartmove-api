@@ -11,11 +11,7 @@ county = api.model('County', {
     'id': fields.String(required=True, description='The county identifier'),
     'county_name': fields.String(required=True, description='The county name.'),
     'average_sale_price': fields.String(description='The average sale price.'),
-    'average_rent_price': fields.String(description='The average sale price.'),
     'total_number_of_sales': fields.String(description="The total number of sales."),
-    'total_properties_for_rent': fields.String(description="The total number of properties for rent."),
-    'max_rent_price': fields.String(description="The current max rent price"),
-    'min_rent_price': fields.String(description="The current min rent price"),
 })
 
 year_stats = api.model('Year', {
@@ -45,13 +41,14 @@ class County(Resource):
 
             if request.args.get('sort_order'):
                 sort_order = 'desc' if request.args.get('sort_order') == 'desc' else 'asc'
-
+            conn.connect()
             sql = "select * from fact_county as f " \
                   "join dim_county as c on f.county_id = c.id " \
                   "order by %s %s" % (sort_by, sort_order)
             with conn.cursor() as cursor:
                 cursor.execute(sql)
             data = cursor.fetchall()
+            conn.close()
             return data if data else api.abort(404)
         else:
             api.abort(401)
@@ -68,9 +65,11 @@ class GetCountyById(Resource):
     def get(self, id):
         if request.args.get('api_key') and validate_key(request.args.get('api_key')) or settings.env == 'TESTING':
             sql = "select * from fact_county as f join dim_county as c on f.county_id = c.id where f.id = %s"
+            conn.connect()
             with conn.cursor() as cursor:
                 cursor.execute(sql, id)
             data = cursor.fetchone()
+            conn.close()
             return data if data else api.abort(404)
         else:
             api.abort(401)
@@ -88,8 +87,8 @@ class YearSalesForCounties(Resource):
     @api.marshal_with(year_stats)
     def get(self, county_name, year):
         if request.args.get('api_key') and validate_key(request.args.get('api_key')) or settings.env == 'TESTING':
-
             params = [county_name, year]
+            conn.connect()
             sql = "select * from fact_year as f " \
                   "join dim_county as d on d.id = f.county_id " \
                   "where county_name like %s and year = %s limit %s, %s"
@@ -100,6 +99,33 @@ class YearSalesForCounties(Resource):
             with conn.cursor() as cursor:
                 cursor.execute(sql, params)
             y = cursor.fetchall()
+            conn.close()
             return y if y else api.abort(404)
+        else:
+            api.abort(401)
+
+
+@api.route('/compare')
+@api.param('api_key', 'Your API key.')
+@api.param('county1', 'The county name.')
+@api.param('county2', 'The county you want to compare the first county to.')
+@api.response(401, 'Invalid API key.')
+class Compare(Resource):
+    def get(self):
+        if request.args.get('api_key') and validate_key(request.args.get('api_key')) or settings.env == 'TESTING':
+            sql = 'select f.total_number_of_sales, f.average_sale_price, d.county_name from fact_county as f ' \
+                  'join dim_county as d ' \
+                  'on f.county_id = d.id ' \
+                  'where d.county_name like %s ' \
+                  'or d.county_name like %s'
+            conn.connect()
+            with conn.cursor() as cursor:
+                cursor.execute(sql, [request.args.get('county1'), request.args.get('county2')])
+            data = cursor.fetchall()
+            if not data:
+                api.abort(404)
+            conn.close()
+            return data
+
         else:
             api.abort(401)
