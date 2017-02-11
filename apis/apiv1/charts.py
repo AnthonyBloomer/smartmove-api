@@ -64,20 +64,24 @@ class Table(Resource):
     def get(self):
         if request.args.get('api_key') and validate_key(request.args.get('api_key')) or settings.env == 'TESTING':
             params = []
-            sql = 'select town_name, average_sale_price from fact_town'
+            sql = 'select town_name, average_sale_price, total_number_of_sales from fact_town'
+            conn.connect()
             with conn.cursor() as cursor:
                 cursor.execute(sql, params)
             data = cursor.fetchall()
             if not data:
                 api.abort(404)
+            conn.close()
             return gviz_json(
-                columns_order=("Town", "Average Sale Price"),
+                columns_order=("Town", "Average Sale Price", "Total Number of Sales"),
                 order_by="Town",
-                desc=[("Town", "String"), ("Average Sale Price", "number")],
+                desc=[("Town", "String"), ("Average Sale Price", "number"), ("Total Number of Sales", "number")],
                 data=data
             )
         else:
             api.abort(401)
+
+
 
 
 @api.route('/compare')
