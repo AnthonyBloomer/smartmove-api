@@ -41,14 +41,12 @@ class County(Resource):
 
             if request.args.get('sort_order'):
                 sort_order = 'desc' if request.args.get('sort_order') == 'desc' else 'asc'
-            conn.connect()
             sql = "select * from fact_county as f " \
                   "join dim_county as c on f.county_id = c.id " \
                   "order by %s %s" % (sort_by, sort_order)
             with conn.cursor() as cursor:
                 cursor.execute(sql)
             data = cursor.fetchall()
-            conn.close()
             return data if data else api.abort(404)
         else:
             api.abort(401)
@@ -65,11 +63,9 @@ class GetCountyById(Resource):
     def get(self, id):
         if request.args.get('api_key') and validate_key(request.args.get('api_key')) or settings.env == 'TESTING':
             sql = "select * from fact_county as f join dim_county as c on f.county_id = c.id where f.id = %s"
-            conn.connect()
             with conn.cursor() as cursor:
                 cursor.execute(sql, id)
             data = cursor.fetchone()
-            conn.close()
             return data if data else api.abort(404)
         else:
             api.abort(401)
@@ -88,7 +84,6 @@ class YearSalesForCounties(Resource):
     def get(self, county_name, year):
         if request.args.get('api_key') and validate_key(request.args.get('api_key')) or settings.env == 'TESTING':
             params = [county_name, year]
-            conn.connect()
             sql = "select * from fact_year as f " \
                   "join dim_county as d on d.id = f.county_id " \
                   "where county_name like %s and year = %s limit %s, %s"
@@ -118,13 +113,11 @@ class Compare(Resource):
                   'on f.county_id = d.id ' \
                   'where d.county_name like %s ' \
                   'or d.county_name like %s'
-            conn.connect()
             with conn.cursor() as cursor:
                 cursor.execute(sql, [request.args.get('county1'), request.args.get('county2')])
             data = cursor.fetchall()
             if not data:
                 api.abort(404)
-            conn.close()
             return data
 
         else:

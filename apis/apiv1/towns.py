@@ -65,7 +65,8 @@ class GetTownById(Resource):
             return data if data else api.abort(404)
         else:
             api.abort(401)
-            
+
+
 @api.route('/compare')
 @api.param('api_key', 'Your API key.')
 @api.param('town1', 'The town name.')

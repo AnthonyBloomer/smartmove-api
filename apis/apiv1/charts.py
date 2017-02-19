@@ -65,13 +65,11 @@ class Table(Resource):
         if request.args.get('api_key') and validate_key(request.args.get('api_key')) or settings.env == 'TESTING':
             params = []
             sql = 'select town_name, average_sale_price, total_number_of_sales from fact_town'
-            conn.connect()
             with conn.cursor() as cursor:
                 cursor.execute(sql, params)
             data = cursor.fetchall()
             if not data:
                 api.abort(404)
-            conn.close()
             return gviz_json(
                 columns_order=("Town", "Average Sale Price", "Total Number of Sales"),
                 order_by="Town",
@@ -84,26 +82,3 @@ class Table(Resource):
 
 
 
-@api.route('/compare')
-@api.param('api_key', 'Your API key.')
-@api.param('county1', 'The county name.')
-@api.param('county2', 'The county you want to compare the first county to.')
-@api.response(401, 'Invalid API key.')
-class Compare(Resource):
-    def get(self):
-        if request.args.get('api_key') and validate_key(request.args.get('api_key')) or settings.env == 'TESTING':
-            sql = 'select f.total_number_of_sales, f.average_sale_price, d.county_name from fact_county as f ' \
-                  'join dim_county as d ' \
-                  'on f.county_id = d.id ' \
-                  'where d.county_name like %s ' \
-                  'or d.county_name like %s'
-            with conn.cursor() as cursor:
-                cursor.execute(sql, [request.args.get('county1'), request.args.get('county2')])
-            data = cursor.fetchall()
-            print data
-            if not data:
-                api.abort(404)
-            return data
-
-        else:
-            api.abort(401)

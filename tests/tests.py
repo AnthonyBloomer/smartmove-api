@@ -3,14 +3,10 @@ import requests
 
 
 class ApiTest(unittest.TestCase):
-    base = 'http://127.0.0.1:5000/'
-    api_key = 'c0acf750-e8d3-11e6-be00-256583c415a5'
+    base = 'http://0.0.0.0:33507/'
 
     def call(self, method):
-        params = {
-            'api_key': self.api_key
-        }
-        req = requests.get(url=self.base + method, params=params)
+        req = requests.get(url=self.base + method)
         return req
 
 
