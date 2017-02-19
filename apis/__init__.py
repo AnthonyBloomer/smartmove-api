@@ -5,6 +5,7 @@ from apis.apiv1.counties import api as counties
 from apis.apiv1.charts import api as charts
 from apis.apiv1.countries import api as countries
 from apis.apiv1.towns import api as towns
+from apis.apiv1.sales import api as sales
 
 api = Api(
     title='Smartmove API',
@@ -17,3 +18,5 @@ api.add_namespace(counties)
 api.add_namespace(charts)
 api.add_namespace(countries)
 api.add_namespace(towns)
+api.add_namespace(sales)
+
