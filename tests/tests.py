@@ -48,3 +48,7 @@ class CountryTest(ApiTest):
     def test_country_by_id(self):
         r = self.call('countries/1').json()
         self.assertTrue(r['country_name'], 'Ireland')
+
+
+class ChartTest(ApiTest):
+    pass
