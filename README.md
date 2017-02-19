@@ -7,7 +7,10 @@ https://github.com/AnthonyBloomer/smartmove-load-scripts
 ## Installation
 
 ```
+virtualenv env
+source env/bin/activate
 pip install -r requirements.txt
+python app.py
 ```
 
 ## Demo
