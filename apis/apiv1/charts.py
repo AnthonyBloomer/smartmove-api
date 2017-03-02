@@ -14,6 +14,10 @@ api = Namespace('charts', description='Get JSON data that can easily be consumed
 @api.response(401, 'Invalid API key.')
 class Chart(Resource):
     def get(self, county_name):
+        """
+        Description: Get average sale price for each year for the given county.
+        :return: JSON
+        """
         if request.args.get('api_key') and validate_key(request.args.get('api_key')) or settings.env == 'TESTING':
             sql = 'select year as Year, average_sale_price as Price from fact_year as f ' \
                   'join dim_county as d ' \
@@ -37,6 +41,10 @@ class Chart(Resource):
 @api.response(401, 'Invalid API key.')
 class Pie(Resource):
     def get(self):
+        """
+        Description: Get average sale price for each county.
+        :return: JSON
+        """
         if request.args.get('api_key') and validate_key(request.args.get('api_key')) or settings.env == 'TESTING':
             sql = 'select d.county_name as County, f.average_sale_price as Price from fact_county as f ' \
                   'inner join dim_county as d on d.id = f.county_id'
@@ -58,6 +66,10 @@ class Pie(Resource):
 @api.response(401, 'Invalid API key.')
 class Table(Resource):
     def get(self):
+        """
+        Description: Get average sale price and number of sales for each town.
+        :return: JSON
+        """
         if request.args.get('api_key') and validate_key(request.args.get('api_key')) or settings.env == 'TESTING':
             params = []
             sql = 'select town_name as Town, average_sale_price as Price, total_number_of_sales as Count from fact_town'
@@ -79,6 +91,10 @@ class Table(Resource):
 @api.response(401, 'Invalid API key.')
 class Table(Resource):
     def get(self):
+        """
+        Description: Get number of sales of new dwellings between 2010-2016
+        :return: JSON
+        """
         if request.args.get('api_key') and validate_key(request.args.get('api_key')) or settings.env == 'TESTING':
             params = []
             sql = 'select year(date_time) as Year, count(*) as Count ' \
@@ -103,6 +119,10 @@ class Table(Resource):
 @api.response(401, 'Invalid API key.')
 class Table(Resource):
     def get(self):
+        """
+        Description: Get average sale price of new dwellings between 2010-2016
+        :return: JSON
+        """
         if request.args.get('api_key') and validate_key(request.args.get('api_key')) or settings.env == 'TESTING':
             params = []
             sql = 'select year(date_time) as Year, avg(price) as Price ' \
