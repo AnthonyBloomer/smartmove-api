@@ -32,6 +32,10 @@ class Property(Resource):
     @api.doc('list_properties')
     @api.marshal_list_with(property)
     def get(self):
+        """
+        Description: Get a list of properties.
+        :return: JSON
+        """
         params = []
         sale_type = 1
         country_id = 1
@@ -88,9 +92,13 @@ class Property(Resource):
 @api.response(404, 'Property not found')
 @api.response(401, 'Invalid API key.')
 class GetPropertyById(Resource):
-    @api.doc('get_country_by_id')
+    @api.doc('get_property_by_id')
     @api.marshal_with(property)
     def get(self, id):
+        """
+        Description: Get a property by ID.
+        :return: JSON
+        """
         if request.args.get('api_key') and validate_key(request.args.get('api_key')) or settings.env == 'TESTING':
 
             sql = "select * from smartmove.properties as p " \
@@ -120,6 +128,10 @@ class PropertySearch(Resource):
     @api.doc('search')
     @api.marshal_with(property)
     def get(self, search_term):
+        """
+        Description: Search properties.
+        :return: JSON
+        """
         if request.args.get('api_key') and validate_key(request.args.get('api_key')) or settings.env == 'TESTING':
 
             sale_type = 1

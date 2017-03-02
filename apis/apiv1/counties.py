@@ -31,7 +31,13 @@ year_stats = api.model('Year', {
 class County(Resource):
     @api.doc('list_county_statistics')
     @api.marshal_list_with(county)
+
     def get(self):
+        """
+        Description: Get a list of county statistics.
+        :return: JSON
+        """
+
         if request.args.get('api_key') and validate_key(request.args.get('api_key')) or settings.env == 'TESTING':
             sort_by = 'f.id'
             sort_order = 'asc'
@@ -60,7 +66,13 @@ class County(Resource):
 class GetCountyById(Resource):
     @api.doc('get_property')
     @api.marshal_with(county)
+
     def get(self, id):
+        """
+        Description: Get county statistics for a given ID.
+        :return: JSON
+        """
+
         if request.args.get('api_key') and validate_key(request.args.get('api_key')) or settings.env == 'TESTING':
             sql = 'select * from fact_county as f join dim_county as c on f.county_id = c.id where f.id = %s'
             with conn.cursor() as cursor:
@@ -81,7 +93,13 @@ class GetCountyById(Resource):
 class YearSalesForCounties(Resource):
     @api.doc('get_year_sales_for_counties')
     @api.marshal_with(year_stats)
+
     def get(self, county_name, year):
+        """
+        Description: Retreive county statistics for a given county name and year.
+        :return: JSON
+        """
+
         if request.args.get('api_key') and validate_key(request.args.get('api_key')) or settings.env == 'TESTING':
             params = [county_name, year]
             sql = "select * from fact_year as f " \
@@ -106,7 +124,14 @@ class YearSalesForCounties(Resource):
 @api.param('county2', 'The county you want to compare the first county to.')
 @api.response(401, 'Invalid API key.')
 class Compare(Resource):
+    @api.doc('compare_counties')
+    @api.marshal_with(county)
+
     def get(self):
+        """
+        Description: Compare sale statistics between two counties.
+        :return: JSON
+        """
         if request.args.get('api_key') and validate_key(request.args.get('api_key')) or settings.env == 'TESTING':
             sql = 'select f.total_number_of_sales, f.average_sale_price, d.county_name from fact_county as f ' \
                   'join dim_county as d ' \

@@ -23,6 +23,10 @@ class Town(Resource):
     @api.doc('list_town_statistics')
     @api.marshal_list_with(town)
     def get(self):
+        """
+        Description: Get a list of town statistics.
+        :return: JSON
+        """
         if request.args.get('api_key') and validate_key(request.args.get('api_key')) or settings.env == 'TESTING':
             params = []
             sort_by = 'id'
@@ -57,6 +61,10 @@ class GetTownById(Resource):
     @api.doc('get_town_by_id')
     @api.marshal_with(town)
     def get(self, id):
+        """
+        Description: Get statistics for a town by its ID.
+        :return: JSON
+        """
         if request.args.get('api_key') and validate_key(request.args.get('api_key')) or settings.env == 'TESTING':
             sql = "select * from fact_town where id = %s"
             with conn.cursor() as cursor:
@@ -73,7 +81,13 @@ class GetTownById(Resource):
 @api.param('town2', 'The town you want to compare the first town to.')
 @api.response(401, 'Invalid API key.')
 class Compare(Resource):
+    @api.doc('compare_towns')
+    @api.marshal_with(town)
     def get(self):
+        """
+        Description: Compare statistics between two towns.
+        :return: JSON
+        """
         if request.args.get('api_key') and validate_key(request.args.get('api_key')) or settings.env == 'TESTING':
             sql = 'select * from fact_town where town_name like %s or town_name like %s'
             with conn.cursor() as cursor:
