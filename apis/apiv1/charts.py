@@ -15,7 +15,7 @@ api = Namespace('charts', description='Get JSON data that can easily be consumed
 class Chart(Resource):
     def get(self, county_name):
         if request.args.get('api_key') and validate_key(request.args.get('api_key')) or settings.env == 'TESTING':
-            sql = 'select year, average_sale_price from fact_year as f ' \
+            sql = 'select year as Year, average_sale_price as Price from fact_year as f ' \
                   'join dim_county as d ' \
                   'on d.id = f.county_id ' \
                   'where d.county_name like %s'
@@ -25,20 +25,20 @@ class Chart(Resource):
             if not data:
                 api.abort(404)
             return gviz_json(
-                desc=[("Average Sale Price", "number"), ("Year", "number")],
+                desc=[("Price", "number"), ("Year", "number")],
                 data=data
             )
         else:
             api.abort(401)
 
 
-@api.route('/pie')
+@api.route('/counties/average-sale-price')
 @api.param('api_key', 'Your API key.')
 @api.response(401, 'Invalid API key.')
 class Pie(Resource):
     def get(self):
         if request.args.get('api_key') and validate_key(request.args.get('api_key')) or settings.env == 'TESTING':
-            sql = 'select d.county_name, f.average_sale_price from fact_county as f ' \
+            sql = 'select d.county_name as County, f.average_sale_price as Price from fact_county as f ' \
                   'inner join dim_county as d on d.id = f.county_id'
             with conn.cursor() as cursor:
                 cursor.execute(sql)
@@ -46,7 +46,7 @@ class Pie(Resource):
             if not data:
                 api.abort(404)
             return gviz_json(
-                desc=[("County", "String"), ("Number of Sales", "number")],
+                desc=[("County", "String"), ("Price", "number")],
                 data=data
             )
         else:
@@ -60,14 +60,14 @@ class Table(Resource):
     def get(self):
         if request.args.get('api_key') and validate_key(request.args.get('api_key')) or settings.env == 'TESTING':
             params = []
-            sql = 'select town_name, average_sale_price, total_number_of_sales from fact_town'
+            sql = 'select town_name as Town, average_sale_price as Price, total_number_of_sales as Count from fact_town'
             with conn.cursor() as cursor:
                 cursor.execute(sql, params)
             data = cursor.fetchall()
             if not data:
                 api.abort(404)
             return gviz_json(
-                desc=[("Town", "String"), ("Average Sale Price", "number"), ("Total Number of Sales", "number")],
+                desc=[("Town", "String"), ("Price", "number"), ("Count", "number")],
                 data=data
             )
         else:
