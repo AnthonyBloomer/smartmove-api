@@ -74,7 +74,7 @@ class Table(Resource):
             api.abort(401)
 
 
-@api.route('/new-dwellings/average-sale-price')
+@api.route('/new-dwellings/number-of-sales')
 @api.param('api_key', 'Your API key.')
 @api.response(401, 'Invalid API key.')
 class Table(Resource):
@@ -98,7 +98,7 @@ class Table(Resource):
             api.abort(401)
 
 
-@api.route('/new-dwellings/number-of-sales')
+@api.route('/new-dwellings/average-sale-price')
 @api.param('api_key', 'Your API key.')
 @api.response(401, 'Invalid API key.')
 class Table(Resource):
