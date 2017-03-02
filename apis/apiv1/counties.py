@@ -62,7 +62,7 @@ class GetCountyById(Resource):
     @api.marshal_with(county)
     def get(self, id):
         if request.args.get('api_key') and validate_key(request.args.get('api_key')) or settings.env == 'TESTING':
-            sql = "select * from fact_county as f join dim_county as c on f.county_id = c.id where f.id = %s"
+            sql = 'select * from fact_county as f join dim_county as c on f.county_id = c.id where f.id = %s'
             with conn.cursor() as cursor:
                 cursor.execute(sql, id)
             data = cursor.fetchone()
