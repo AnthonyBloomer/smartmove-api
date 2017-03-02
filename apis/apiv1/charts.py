@@ -19,7 +19,7 @@ class Chart(Resource):
         :return: JSON
         """
         if request.args.get('api_key') and validate_key(request.args.get('api_key')) or settings.env == 'TESTING':
-            sql = 'select year as Year, average_sale_price as Price from fact_year as f ' \
+            sql = 'select average_sale_price as Price, year as Year from fact_year as f ' \
                   'join dim_county as d ' \
                   'on d.id = f.county_id ' \
                   'where d.county_name like %s'

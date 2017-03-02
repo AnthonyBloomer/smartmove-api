@@ -4,16 +4,12 @@
 
 google.load('visualization', '1.0', {'packages': ['corechart', 'table'], 'callback': drawCharts});
 
-var params = {
-    api_key: 'c0acf750-e8d3-11e6-be00-256583c415a5'
-};
 
 function drawPie() {
     var json = $.ajax({
-        url: "http://127.0.0.1:5000/gcharts/pie",
+        url: "http://0.0.0.0:33507/charts/counties/average-sale-price",
         dataType: "json",
-        async: false,
-        data: params
+        async: false
     }).responseText;
 
     var data = new google.visualization.DataTable(json);
@@ -26,32 +22,11 @@ function drawPie() {
     chart.draw(data, options);
 }
 
-function drawChart() {
-    var json = $.ajax({
-        url: "http://127.0.0.1:5000/gcharts/dublin",
-        dataType: "json",
-        async: false,
-        data: params
-    }).responseText;
-
-    var data = new google.visualization.DataTable(json);
-    var options = {
-        title: 'Average Sale Price',
-        hAxis: {title: 'Year'},
-        vAxis: {title: 'Average Sale Price'},
-        legend: 'none'
-    };
-
-    var chart = new google.visualization.LineChart(document.getElementById('chart_div'));
-    chart.draw(data, options);
-}
-
 function getTableData() {
     var json = $.ajax({
-        url: "http://127.0.0.1:5000/gcharts/table",
+        url: "http://0.0.0.0:33507/charts/table",
         dataType: "json",
-        async: false,
-        data: params
+        async: false
     }).responseText;
     console.log(json);
     var data = new google.visualization.DataTable(json);
@@ -60,7 +35,6 @@ function getTableData() {
 }
 
 function drawCharts() {
-    drawChart();
     drawPie();
     getTableData();
 }
