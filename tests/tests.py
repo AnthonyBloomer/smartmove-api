@@ -19,7 +19,7 @@ class PropertyTest(ApiTest):
         self.assertTrue(r['county_name'], 'Dublin')
 
     def test_property_search(self):
-        r = self.call('properties/search/ballivor')
+        r = self.call('properties/search/ballivor/')
         self.assertTrue(r.status_code, 200)
 
 
@@ -51,4 +51,22 @@ class CountryTest(ApiTest):
 
 
 class ChartTest(ApiTest):
-    pass
+    def test_avg_county(self):
+        req = self.call('charts/dublin')
+        self.assertTrue(req.status_code, 200)
+
+    def test_pie_chart(self):
+        req = self.call('charts/counties/average-sale-price')
+        self.assertTrue(req.status_code, 200)
+
+    def test_town_table(self):
+        req = self.call('charts/table')
+        self.assertTrue(req.status_code, 200)
+
+    def test_avg_dwellings(self):
+        req = self.call('new-dwellings/average-sale-price')
+        self.assertTrue(req.status_code, 200)
+
+    def test_sum_dwellings(self):
+        req = self.call('new-dwellings/number-of-sales')
+        self.assertTrue(req.status_code, 200)

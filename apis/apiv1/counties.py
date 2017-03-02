@@ -31,7 +31,6 @@ year_stats = api.model('Year', {
 class County(Resource):
     @api.doc('list_county_statistics')
     @api.marshal_list_with(county)
-
     def get(self):
         """
         Description: Get a list of county statistics.
@@ -66,7 +65,6 @@ class County(Resource):
 class GetCountyById(Resource):
     @api.doc('get_property')
     @api.marshal_with(county)
-
     def get(self, id):
         """
         Description: Get county statistics for a given ID.
@@ -93,7 +91,6 @@ class GetCountyById(Resource):
 class YearSalesForCounties(Resource):
     @api.doc('get_year_sales_for_counties')
     @api.marshal_with(year_stats)
-
     def get(self, county_name, year):
         """
         Description: Retreive county statistics for a given county name and year.
@@ -126,7 +123,6 @@ class YearSalesForCounties(Resource):
 class Compare(Resource):
     @api.doc('compare_counties')
     @api.marshal_with(county)
-
     def get(self):
         """
         Description: Compare sale statistics between two counties.
