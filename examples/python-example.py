@@ -1,4 +1,5 @@
 import requests
+from urllib import quote_plus
 
 # Get all properties
 
@@ -30,3 +31,16 @@ req = req.json()
 
 for r in req:
     print 'County: %s, Average Sale Price %s' % (r['county_name'], r['average_sale_price'])
+
+# Search example
+req = requests.get('http://0.0.0.0:33507/properties/search/' + quote_plus('Dublin City'), params={
+    'sale_type': 1,
+    'from_date': 2015,
+    'to_date': 2015
+})
+
+req = req.json()
+for r in req:
+    print r['address']
+    print r['price']
+    print r['date_time']
