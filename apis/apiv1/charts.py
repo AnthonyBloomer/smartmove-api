@@ -1,6 +1,6 @@
 from flask_restplus import Namespace, Resource
 from core.connection import conn
-from core.utils import paginate, gviz_json, validate_key
+from core.utils import gviz_json, validate_key
 from flask import request
 import settings
 
@@ -25,8 +25,6 @@ class Chart(Resource):
             if not data:
                 api.abort(404)
             return gviz_json(
-                columns_order=("Year", "Average Sale Price"),
-                order_by="Year",
                 desc=[("Average Sale Price", "number"), ("Year", "number")],
                 data=data
             )
@@ -48,8 +46,6 @@ class Pie(Resource):
             if not data:
                 api.abort(404)
             return gviz_json(
-                columns_order=("County", "Number of Sales"),
-                order_by="County",
                 desc=[("County", "String"), ("Number of Sales", "number")],
                 data=data
             )
@@ -71,8 +67,6 @@ class Table(Resource):
             if not data:
                 api.abort(404)
             return gviz_json(
-                columns_order=("Town", "Average Sale Price", "Total Number of Sales"),
-                order_by="Town",
                 desc=[("Town", "String"), ("Average Sale Price", "number"), ("Total Number of Sales", "number")],
                 data=data
             )
@@ -80,5 +74,49 @@ class Table(Resource):
             api.abort(401)
 
 
+@api.route('/new-dwellings/average-sale-price')
+@api.param('api_key', 'Your API key.')
+@api.response(401, 'Invalid API key.')
+class Table(Resource):
+    def get(self):
+        if request.args.get('api_key') and validate_key(request.args.get('api_key')) or settings.env == 'TESTING':
+            params = []
+            sql = 'select year(date_time) as Year, count(*) as Count ' \
+                  'from smartmove.properties ' \
+                  'where description = "New Dwelling house /Apartment" ' \
+                  'group by Year '
+            with conn.cursor() as cursor:
+                cursor.execute(sql, params)
+            data = cursor.fetchall()
+            if not data:
+                api.abort(404)
+            return gviz_json(
+                desc=[("Year", "number"), ("Count", "number")],
+                data=data
+            )
+        else:
+            api.abort(401)
 
 
+@api.route('/new-dwellings/number-of-sales')
+@api.param('api_key', 'Your API key.')
+@api.response(401, 'Invalid API key.')
+class Table(Resource):
+    def get(self):
+        if request.args.get('api_key') and validate_key(request.args.get('api_key')) or settings.env == 'TESTING':
+            params = []
+            sql = 'select year(date_time) as Year, avg(price) as Price ' \
+                  'from smartmove.properties ' \
+                  'where description = "New Dwelling house /Apartment" ' \
+                  'group by Year'
+            with conn.cursor() as cursor:
+                cursor.execute(sql, params)
+            data = cursor.fetchall()
+            if not data:
+                api.abort(404)
+            return gviz_json(
+                desc=[("Year", "number"), ("Price", "number")],
+                data=data
+            )
+        else:
+            api.abort(401)

@@ -16,18 +16,18 @@ def paginate():
     return params
 
 
-def gviz_json(columns_order, order_by, desc, data):
+def gviz_json(desc, data):
     data = [tuple(d.values()) for d in data]
     data_table = gviz_api.DataTable(desc)
     data_table.LoadData(data)
-    json_str = data_table.ToJSon(columns_order=columns_order, order_by=order_by)
+    json_str = data_table.ToJSon()
     parsed_json = json.loads(json_str)
     return parsed_json
 
 
 def validate_key(api_key):
     with conn.cursor() as cursor:
-        sql = "SELECT api_key FROM dashboard.api_keys WHERE api_key = %s"
+        sql = ""
         cursor.execute(sql, api_key)
         result = cursor.fetchone()
         if result:
