@@ -145,7 +145,7 @@ class PropertySearch(Resource):
                   "on p.county_id = c.id " \
                   "where p.address like %s " \
                   "and sale_type = %s " \
-                  "and year(date_time) BETWEEN %s AND %s " \
+                  "and year(date_time) between %s and %s " \
                   "and p.country_id = %s " \
                   "limit %s, %s"
 
