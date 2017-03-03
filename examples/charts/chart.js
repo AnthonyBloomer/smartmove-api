@@ -24,6 +24,20 @@ function draw_pie() {
     chart.draw(data, options);
 }
 
+function county() {
+    var json = ajax('http://0.0.0.0:33507/charts/dublin');
+    var data = new google.visualization.DataTable(json);
+    var options = {
+        title: 'Average Sale Price',
+        hAxis: {title: 'Year'},
+        vAxis: {title: 'Average Sale Price'},
+        legend: 'none'
+    };
+
+    var chart = new google.visualization.LineChart(document.getElementById('county'));
+    chart.draw(data, options);
+}
+
 function new_dwelling_sales() {
     var dwelling_sales = ajax('http://0.0.0.0:33507/charts/new-dwellings/number-of-sales');
     var data = new google.visualization.DataTable(dwelling_sales);
@@ -73,6 +87,7 @@ function get_table_data() {
 
 function drawCharts() {
     draw_pie();
+    county();
     get_table_data();
     new_dwelling_sales();
     new_dwelling_prices();

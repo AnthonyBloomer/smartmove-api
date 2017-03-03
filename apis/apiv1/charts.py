@@ -30,7 +30,7 @@ class Chart(Resource):
                 api.abort(404)
             return gviz_json(
                 desc=[("Price", "number"), ("Year", "number")],
-                columns_order=("Price", "Year"),
+                columns_order=("Year", "Price"),
                 data=data
             )
         else:

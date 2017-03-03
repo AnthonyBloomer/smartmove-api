@@ -1,4 +1,4 @@
-#chart_div, #piechart, #dwelling_sales, #dwelling_avgs {
+#chart_div, #piechart, #dwelling_sales, #dwelling_avgs, #county {
     width: 100%;
     min-height: 500px;
 }
