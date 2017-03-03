@@ -33,7 +33,7 @@ class Property(Resource):
     @api.marshal_list_with(property)
     def get(self):
         """
-        Description: Get a list of properties.
+        Description: Get all properties.
         :return: JSON
         """
         params = []
@@ -117,7 +117,7 @@ class GetPropertyById(Resource):
 @api.route('/search/<search_term>')
 @api.param('search_term', 'The search query')
 @api.param('country_id', 'The country identifier')
-@api.param('offset', 'The page number.')
+@api.param('page', 'The page number.')
 @api.param('api_key', 'Your API key.')
 @api.param('sale_type', 'The sale type')
 @api.param('from_date', 'The from date')
@@ -133,7 +133,7 @@ class PropertySearch(Resource):
         :return: JSON
         """
         if request.args.get('api_key') and validate_key(request.args.get('api_key')) or settings.env == 'TESTING':
-
+            order_by = ['price', 'id', 'date']
             sale_type = 1
             country_id = 1
             params = []
