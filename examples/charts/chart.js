@@ -4,15 +4,17 @@
 
 google.load('visualization', '1.0', {'packages': ['corechart', 'table'], 'callback': drawCharts});
 
-
-function drawPie() {
-    var json = $.ajax({
-        url: "http://0.0.0.0:33507/charts/counties/average-sale-price",
+function ajax(method) {
+    return $.ajax({
+        url: method,
         dataType: "json",
         async: false
     }).responseText;
+}
 
-    var data = new google.visualization.DataTable(json);
+function draw_pie() {
+    var p = ajax('http://0.0.0.0:33507/charts/counties/average-sale-price');
+    var data = new google.visualization.DataTable(p);
 
     var options = {
         title: 'Average sale price'
@@ -22,20 +24,50 @@ function drawPie() {
     chart.draw(data, options);
 }
 
-function getTableData() {
-    var json = $.ajax({
-        url: "http://0.0.0.0:33507/charts/table",
-        dataType: "json",
-        async: false
-    }).responseText;
-    console.log(json);
-    var data = new google.visualization.DataTable(json);
+function new_dwelling_sales() {
+    var dwelling_sales = ajax('http://0.0.0.0:33507/charts/new-dwellings/number-of-sales');
+    var data = new google.visualization.DataTable(dwelling_sales);
+    var options = {
+        hAxis: {
+            title: 'Count'
+        },
+        vAxis: {
+            title: 'Year'
+        }
+    };
+
+    var chart = new google.visualization.LineChart(document.getElementById('dwelling_sales'));
+    chart.draw(data, options);
+}
+
+function new_dwelling_prices() {
+    var dwelling_sales = ajax('http://0.0.0.0:33507/charts/new-dwellings/average-sale-price');
+    var data = new google.visualization.DataTable(dwelling_sales);
+    console.log(data);
+    var options = {
+        hAxis: {
+            title: 'Price'
+        },
+        vAxis: {
+            title: 'Year'
+        }
+    };
+
+    var chart = new google.visualization.LineChart(document.getElementById('dwelling_avgs'));
+    chart.draw(data, options);
+}
+
+function get_table_data() {
+    var t = ajax('http://0.0.0.0:33507/charts/table');
+    var data = new google.visualization.DataTable(t);
     var table = new google.visualization.Table(document.getElementById('table'));
     table.draw(data, {showRowNumber: true, width: '100%', height: '100%'});
 }
 
 function drawCharts() {
-    drawPie();
-    getTableData();
+    draw_pie();
+    get_table_data();
+    new_dwelling_sales();
+    new_dwelling_prices();
 }
 

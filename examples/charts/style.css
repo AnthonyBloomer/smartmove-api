@@ -1,4 +1,5 @@
-#chart_div, #piechart {
+#chart_div, #piechart, #dwelling_sales, #dwelling_avgs {
     width: 100%;
     min-height: 500px;
 }
+

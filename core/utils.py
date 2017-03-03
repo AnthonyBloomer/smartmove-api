@@ -16,11 +16,11 @@ def paginate():
     return params
 
 
-def gviz_json(desc, data):
+def gviz_json(desc, data, columns_order=None, order_by=None):
     data = [tuple(d.values()) for d in data]
     data_table = gviz_api.DataTable(desc)
     data_table.LoadData(data)
-    json_str = data_table.ToJSon()
+    json_str = data_table.ToJSon(columns_order=columns_order, order_by=order_by)
     parsed_json = json.loads(json_str)
     return parsed_json
 
@@ -32,4 +32,3 @@ def validate_key(api_key):
         result = cursor.fetchone()
         if result:
             return True
-

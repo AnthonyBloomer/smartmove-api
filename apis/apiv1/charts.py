@@ -1,6 +1,6 @@
 from flask_restplus import Namespace, Resource
 from core.connection import conn
-from core.utils import gviz_json, validate_key
+from core.utils import gviz_json, validate_key, paginate
 from flask import request
 import settings
 
@@ -30,6 +30,7 @@ class Chart(Resource):
                 api.abort(404)
             return gviz_json(
                 desc=[("Price", "number"), ("Year", "number")],
+                columns_order=("Price", "Year"),
                 data=data
             )
         else:
@@ -72,9 +73,13 @@ class Table(Resource):
         """
         if request.args.get('api_key') and validate_key(request.args.get('api_key')) or settings.env == 'TESTING':
             params = []
-            sql = 'select town_name as Town, average_sale_price as Price, total_number_of_sales as Count from fact_town'
+            sql = 'select town_name as Town, average_sale_price as Price, total_number_of_sales as Count ' \
+                  'from fact_town limit %s, %s'
+            for d in paginate():
+                params.append(d)
             with conn.cursor() as cursor:
                 cursor.execute(sql, params)
+
             data = cursor.fetchall()
             if not data:
                 api.abort(404)
@@ -108,6 +113,7 @@ class Table(Resource):
                 api.abort(404)
             return gviz_json(
                 desc=[("Year", "number"), ("Count", "number")],
+                columns_order=("Count", "Year"),
                 data=data
             )
         else:
@@ -136,6 +142,7 @@ class Table(Resource):
                 api.abort(404)
             return gviz_json(
                 desc=[("Year", "number"), ("Price", "number")],
+                columns_order=("Price", "Year"),
                 data=data
             )
         else:
