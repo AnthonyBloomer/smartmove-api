@@ -8,14 +8,14 @@ api = Namespace('charts', description='Get JSON data that can easily be consumed
 
 
 @api.route('/<county_name>')
-@api.param('county_name', 'The get_county_price name.')
+@api.param('county_name', 'The county name.')
 @api.param('api_key', 'Your API key.')
 @api.response(404, 'Property not found')
 @api.response(401, 'Invalid API key.')
 class Chart(Resource):
     def get(self, county_name):
         """
-        Description: Get average sale price for each year for the given get_county_price.
+        Description: Get average sale price for each year for the given county.
         :return: JSON
         """
         if request.args.get('api_key') and validate_key(request.args.get('api_key')) or settings.env == 'TESTING':
@@ -39,11 +39,12 @@ class Chart(Resource):
 
 @api.route('/counties/average-sale-price')
 @api.param('api_key', 'Your API key.')
+@api.param('per_page', 'The number of results we will show. Default is 10.')
 @api.response(401, 'Invalid API key.')
 class Pie(Resource):
     def get(self):
         """
-        Description: Get average sale price for each get_county_price.
+        Description: Get average sale price for each county.
         :return: JSON
         """
         if request.args.get('api_key') and validate_key(request.args.get('api_key')) or settings.env == 'TESTING':

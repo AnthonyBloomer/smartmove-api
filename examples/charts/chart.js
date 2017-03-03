@@ -95,6 +95,6 @@ function drawCharts() {
 
 
 $("#county-avg").click(function () {
-    var county = $("#option").val();
-    get_county_price(county);
+    var c = $("#option").val();
+    get_county_price(county = c);
 });

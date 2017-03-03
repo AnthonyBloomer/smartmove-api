@@ -93,7 +93,7 @@ class YearSalesForCounties(Resource):
     @api.marshal_with(year_stats)
     def get(self, county_name, year):
         """
-        Description: Retreive get_county_price statistics for a given get_county_price name and year.
+        Description: Retreive get_county_price statistics for a given county name and year.
         :return: JSON
         """
 
@@ -117,8 +117,8 @@ class YearSalesForCounties(Resource):
 
 @api.route('/compare')
 @api.param('api_key', 'Your API key.')
-@api.param('county1', 'The get_county_price name.')
-@api.param('county2', 'The get_county_price you want to compare the first get_county_price to.')
+@api.param('county1', 'The county name.')
+@api.param('county2', 'The county you want to compare the first county to.')
 @api.response(401, 'Invalid API key.')
 class Compare(Resource):
     @api.doc('compare_counties')
