@@ -64,6 +64,7 @@ class Pie(Resource):
 
 @api.route('/table')
 @api.param('api_key', 'Your API key.')
+@api.param('page', 'The page number.')
 @api.response(401, 'Invalid API key.')
 class Table(Resource):
     def get(self):
