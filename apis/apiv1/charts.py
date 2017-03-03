@@ -95,7 +95,7 @@ class Table(Resource):
 @api.route('/new-dwellings/number-of-sales')
 @api.param('api_key', 'Your API key.')
 @api.response(401, 'Invalid API key.')
-class Table(Resource):
+class DwellingNumOfSales(Resource):
     def get(self):
         """
         Description: Get number of sales of new dwellings between 2010-2016
@@ -124,7 +124,7 @@ class Table(Resource):
 @api.route('/new-dwellings/average-sale-price')
 @api.param('api_key', 'Your API key.')
 @api.response(401, 'Invalid API key.')
-class Table(Resource):
+class DwellingAverageSalePrice(Resource):
     def get(self):
         """
         Description: Get average sale price of new dwellings between 2010-2016
