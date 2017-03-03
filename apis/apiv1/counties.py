@@ -5,18 +5,18 @@ from flask import request
 from core.utils import paginate
 import settings
 
-api = Namespace('counties', description='Get property sale statistics for each county')
+api = Namespace('counties', description='Get property sale statistics for each get_county_price')
 
 county = api.model('County', {
-    'id': fields.String(required=True, description='The county identifier'),
-    'county_name': fields.String(required=True, description='The county name.'),
+    'id': fields.String(required=True, description='The get_county_price identifier'),
+    'county_name': fields.String(required=True, description='The get_county_price name.'),
     'average_sale_price': fields.String(description='The average sale price.'),
     'total_number_of_sales': fields.String(description="The total number of sales."),
 })
 
 year_stats = api.model('Year', {
-    'id': fields.String(required=True, description='The county identifier'),
-    'county_name': fields.String(required=True, description='The county name.'),
+    'id': fields.String(required=True, description='The get_county_price identifier'),
+    'county_name': fields.String(required=True, description='The get_county_price name.'),
     'average_sale_price': fields.String(description='The average sale price.'),
     'total_number_of_sales': fields.String(description="The total number of sales."),
     'year': fields.String(description="Year")
@@ -33,7 +33,7 @@ class County(Resource):
     @api.marshal_list_with(county)
     def get(self):
         """
-        Description: Get a list of county statistics.
+        Description: Get a list of get_county_price statistics.
         :return: JSON
         """
 
@@ -67,7 +67,7 @@ class GetCountyById(Resource):
     @api.marshal_with(county)
     def get(self, id):
         """
-        Description: Get county statistics for a given ID.
+        Description: Get get_county_price statistics for a given ID.
         :return: JSON
         """
 
@@ -82,8 +82,8 @@ class GetCountyById(Resource):
 
 
 @api.route('/<county_name>/<year>')
-@api.param('county_name', 'The county name.')
-@api.param('year', 'The year you wish to get county sale statistics for.')
+@api.param('county_name', 'The get_county_price name.')
+@api.param('year', 'The year you wish to get get_county_price sale statistics for.')
 @api.param('sale_type', 'The sale type.')
 @api.param('api_key', 'Your API key.')
 @api.response(401, 'Invalid API key.')
@@ -93,7 +93,7 @@ class YearSalesForCounties(Resource):
     @api.marshal_with(year_stats)
     def get(self, county_name, year):
         """
-        Description: Retreive county statistics for a given county name and year.
+        Description: Retreive get_county_price statistics for a given get_county_price name and year.
         :return: JSON
         """
 
@@ -117,8 +117,8 @@ class YearSalesForCounties(Resource):
 
 @api.route('/compare')
 @api.param('api_key', 'Your API key.')
-@api.param('county1', 'The county name.')
-@api.param('county2', 'The county you want to compare the first county to.')
+@api.param('county1', 'The get_county_price name.')
+@api.param('county2', 'The get_county_price you want to compare the first get_county_price to.')
 @api.response(401, 'Invalid API key.')
 class Compare(Resource):
     @api.doc('compare_counties')

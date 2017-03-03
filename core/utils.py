@@ -4,9 +4,9 @@ import json
 from .connection import conn
 
 
-def paginate():
-    page = 0
-    per_page = 25
+def paginate(page=0, per_page=25):
+    page = page
+    per_page = per_page
     params = []
     if request.args.get('page'):
         page = request.args.get('page')

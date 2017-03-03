@@ -11,7 +11,7 @@ api = Namespace('properties', description='Property related operations')
 property = api.model('Property', {
     'id': fields.String(required=True, description='The property identifier'),
     'address': fields.String(required=True, description='The address of the property.'),
-    'county_name': fields.String(required=True, description='The county.'),
+    'county_name': fields.String(required=True, description='The get_county_price.'),
     'sale_type': fields.String(required=True, description="The sale type"),
     'description': fields.String(required=True, description='The description of the property.'),
     'date_time': fields.String(required=True, description='The date of sale.'),

@@ -17,18 +17,18 @@ function draw_pie() {
     var data = new google.visualization.DataTable(p);
 
     var options = {
-        title: 'Average sale price'
+        title: 'Top 10 counties by average sale price.'
     };
 
     var chart = new google.visualization.PieChart(document.getElementById('piechart'));
     chart.draw(data, options);
 }
 
-function county() {
-    var json = ajax('http://0.0.0.0:33507/charts/dublin');
+function get_county_price(county) {
+    var json = ajax('http://0.0.0.0:33507/charts/' + county);
     var data = new google.visualization.DataTable(json);
     var options = {
-        title: 'Average Sale Price',
+        title: 'Average Sale Price in ' + county,
         hAxis: {title: 'Year'},
         vAxis: {title: 'Average Sale Price'},
         legend: 'none'
@@ -87,9 +87,14 @@ function get_table_data() {
 
 function drawCharts() {
     draw_pie();
-    county();
+    get_county_price(county = 'dublin');
     get_table_data();
     new_dwelling_sales();
     new_dwelling_prices();
 }
 
+
+$("#county-avg").click(function () {
+    var county = $("#option").val();
+    get_county_price(county);
+});

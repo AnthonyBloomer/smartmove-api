@@ -8,14 +8,14 @@ api = Namespace('charts', description='Get JSON data that can easily be consumed
 
 
 @api.route('/<county_name>')
-@api.param('county_name', 'The county name.')
+@api.param('county_name', 'The get_county_price name.')
 @api.param('api_key', 'Your API key.')
 @api.response(404, 'Property not found')
 @api.response(401, 'Invalid API key.')
 class Chart(Resource):
     def get(self, county_name):
         """
-        Description: Get average sale price for each year for the given county.
+        Description: Get average sale price for each year for the given get_county_price.
         :return: JSON
         """
         if request.args.get('api_key') and validate_key(request.args.get('api_key')) or settings.env == 'TESTING':
@@ -43,14 +43,20 @@ class Chart(Resource):
 class Pie(Resource):
     def get(self):
         """
-        Description: Get average sale price for each county.
+        Description: Get average sale price for each get_county_price.
         :return: JSON
         """
         if request.args.get('api_key') and validate_key(request.args.get('api_key')) or settings.env == 'TESTING':
+            per_page = 10
+            if request.args.get('per_page'):
+                per_page = request.args.get('per_page')
+            params = []
             sql = 'select d.county_name as County, f.average_sale_price as Price from fact_county as f ' \
-                  'inner join dim_county as d on d.id = f.county_id'
+                  'inner join dim_county as d on d.id = f.county_id order by Price desc limit %s, %s'
+            for d in paginate(per_page=per_page):
+                params.append(d)
             with conn.cursor() as cursor:
-                cursor.execute(sql)
+                cursor.execute(sql, params)
             data = cursor.fetchall()
             if not data:
                 api.abort(404)
@@ -106,6 +112,7 @@ class DwellingNumOfSales(Resource):
             sql = 'select year(date_time) as Year, count(*) as Count ' \
                   'from smartmove.properties ' \
                   'where description = "New Dwelling house /Apartment" ' \
+                  'and year(date_time) != 2017 ' \
                   'group by Year '
             with conn.cursor() as cursor:
                 cursor.execute(sql, params)
@@ -135,6 +142,7 @@ class DwellingAverageSalePrice(Resource):
             sql = 'select year(date_time) as Year, avg(price) as Price ' \
                   'from smartmove.properties ' \
                   'where description = "New Dwelling house /Apartment" ' \
+                  'and year(date_time) != 2017 ' \
                   'group by Year'
             with conn.cursor() as cursor:
                 cursor.execute(sql, params)

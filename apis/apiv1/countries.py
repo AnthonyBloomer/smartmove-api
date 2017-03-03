@@ -8,7 +8,7 @@ api = Namespace('countries', description='Get country property sale statistics.'
 
 country = api.model('Country', {
     'id': fields.String(required=True, description='The country identifier'),
-    'country_name': fields.String(required=True, description='The county name.'),
+    'country_name': fields.String(required=True, description='The get_county_price name.'),
     'average_sale_price': fields.String(description='The average sale price.'),
     'total_number_of_sales': fields.String(description="The total number of sales.")
 })

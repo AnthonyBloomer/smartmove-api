@@ -3,3 +3,6 @@
     min-height: 500px;
 }
 
+body {
+    text-transform: capitalize;
+}
