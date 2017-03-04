@@ -81,7 +81,7 @@ class Table(Resource):
         """
         if request.args.get('api_key') and validate_key(request.args.get('api_key')) or settings.env == 'TESTING':
             params = []
-            sql = 'select town_name as Town, average_sale_price as Price, total_number_of_sales as Count ' \
+            sql = 'select town_name as Town, total_number_of_sales as Count, average_sale_price as Price ' \
                   'from fact_town limit %s, %s'
             for d in paginate():
                 params.append(d)
@@ -92,8 +92,9 @@ class Table(Resource):
             if not data:
                 api.abort(404)
             return gviz_json(
-                desc=[("Town", "String"), ("Price", "number"), ("Count", "number")],
-                data=data
+                data=data,
+                desc=[("Town", "String"), ("Count", "number"), ("Price", "number")],
+                columns_order=("Town", "Count", "Price"),
             )
         else:
             api.abort(401)
