@@ -4,9 +4,9 @@
 
 google.load('visualization', '1.0', {'packages': ['corechart', 'table'], 'callback': drawCharts});
 
-function ajax(method) {
+function ajax(url) {
     return $.ajax({
-        url: method,
+        url: url,
         dataType: "json",
         async: false
     }).responseText;
