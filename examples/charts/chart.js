@@ -4,6 +4,8 @@
 
 google.load('visualization', '1.0', {'packages': ['corechart', 'table'], 'callback': drawCharts});
 
+const URL = 'http://0.0.0.0:33507/';
+
 function ajax(url) {
     return $.ajax({
         url: url,
@@ -13,7 +15,7 @@ function ajax(url) {
 }
 
 function draw_pie() {
-    var p = ajax('http://0.0.0.0:33507/charts/counties/average-sale-price');
+    var p = ajax(URL + 'charts/counties/average-sale-price');
     var data = new google.visualization.DataTable(p);
 
     var options = {
@@ -25,7 +27,7 @@ function draw_pie() {
 }
 
 function get_county_price(county) {
-    var json = ajax('http://0.0.0.0:33507/charts/' + county);
+    var json = ajax(URL + 'charts/' + county);
     var data = new google.visualization.DataTable(json);
     var options = {
         title: 'Average Sale Price in ' + county,
@@ -39,7 +41,7 @@ function get_county_price(county) {
 }
 
 function new_dwelling_sales() {
-    var dwelling_sales = ajax('http://0.0.0.0:33507/charts/new-dwellings/number-of-sales');
+    var dwelling_sales = ajax(URL + 'charts/new-dwellings/number-of-sales');
     var data = new google.visualization.DataTable(dwelling_sales);
     var options = {
         hAxis: {
@@ -56,7 +58,7 @@ function new_dwelling_sales() {
 }
 
 function new_dwelling_prices() {
-    var dwelling_sales = ajax('http://0.0.0.0:33507/charts/new-dwellings/average-sale-price');
+    var dwelling_sales = ajax(URL + 'charts/new-dwellings/average-sale-price');
     var data = new google.visualization.DataTable(dwelling_sales);
     console.log(data);
     var options = {
@@ -74,7 +76,7 @@ function new_dwelling_prices() {
 }
 
 function get_table_data() {
-    var t = ajax('http://0.0.0.0:33507/charts/table');
+    var t = ajax(URL + 'charts/table');
     var data = new google.visualization.DataTable(t);
     var table = new google.visualization.Table(document.getElementById('table'));
     table.draw(data, {
