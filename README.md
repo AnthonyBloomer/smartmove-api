@@ -23,7 +23,7 @@ Get JSON data that can easily be consumed by the Google Charts API.
 #### Line Chart
 
 ```shell
-curl -X GET --header 'Accept: application/json' 'http://0.0.0.0:33507/charts/<county_name>'
+curl -X GET --header 'Accept: application/json' 'http://0.0.0.0:33507/api/v1/charts/<county_name>'
 ```
 
 > The above command returns JSON structured like this:
@@ -61,7 +61,7 @@ This endpoint returns the average sale price for each year for a given county.
 
 ##### HTTP Request
 
-`GET http://0.0.0.0:33507/charts/<county_name>`
+`GET http://0.0.0.0:33507/api/v1/charts/<county_name>`
 
 ##### Query Parameters
 
@@ -73,7 +73,7 @@ This endpoint returns the average sale price for each year for a given county.
 #### Pie Chart
 
 ```shell
-curl -X GET --header 'Accept: application/json' 'http://0.0.0.0:33507/charts/counties/average-sale-price'
+curl -X GET --header 'Accept: application/json' 'http://0.0.0.0:33507/api/v1/charts/counties/average-sale-price'
 ```
 
 > The above command returns JSON structured like this:
@@ -111,7 +111,7 @@ This endpoint returns the average sale price for each county.
 
 ##### HTTP Request
 
-`http://0.0.0.0:33507/charts/counties/average-sale-price`
+`http://0.0.0.0:33507/api/v1/charts/counties/average-sale-price`
 
 ##### Query Parameters
 
@@ -130,7 +130,7 @@ Get property sale statistics for each county.
 
 
 ```shell
-curl -X GET --header 'Accept: application/json' 'http://0.0.0.0:33507/counties/'
+curl -X GET --header 'Accept: application/json' 'http://0.0.0.0:33507/api/v1/counties/'
 ```
 
 > The above command returns JSON structured like this:
@@ -150,7 +150,7 @@ This endpoint retrieves a list of county sale statistics.
 
 ##### HTTP Request
 
-`GET http://0.0.0.0:33507/counties/`
+`GET http://0.0.0.0:33507/api/v1/counties/`
 
 ##### Query Parameters
 
@@ -163,7 +163,7 @@ This endpoint retrieves a list of county sale statistics.
 #### Get County By ID
 
 ```shell
-curl -X GET --header 'Accept: application/json' 'http://0.0.0.0:33507/counties/<id>'
+curl -X GET --header 'Accept: application/json' 'http://0.0.0.0:33507/api/v1/counties/<id>'
 ```
 
 > The above command returns JSON structured like this:
@@ -181,7 +181,7 @@ This endpoint retrieves a county by ID
 
 ##### HTTP Request
 
-`GET http://0.0.0.0:33507/counties/<id>`
+`GET http://0.0.0.0:33507/api/v1/counties/<id>`
 
 ##### Query Parameters
 
@@ -193,7 +193,7 @@ This endpoint retrieves a county by ID
 #### County comparison
 
 ```shell
-curl -X GET --header 'Accept: application/json' 'http://0.0.0.0:33507/counties/compare?county1=<county1>&county1=<county2>'
+curl -X GET --header 'Accept: application/json' 'http://0.0.0.0:33507/api/v1/counties/compare?county1=<county1>&county1=<county2>'
 ```
 
 > The above command returns JSON structured like this:
@@ -219,7 +219,7 @@ This endpoint compares sale statistics between two counties.
 
 ##### HTTP Request
 
-`GET http://0.0.0.0:33507/counties/compare?county2=<county2>&county1=<county1>`
+`GET http://0.0.0.0:33507/api/v1/counties/compare?county2=<county2>&county1=<county1>`
 
 ##### Query Parameters
 
@@ -233,7 +233,7 @@ This endpoint compares sale statistics between two counties.
 #### County Statistics by Year
 
 ```shell
-curl -X GET --header 'Accept: application/json' 'http://0.0.0.0:33507/counties/<county>/<year>'
+curl -X GET --header 'Accept: application/json' 'http://0.0.0.0:33507/api/v1/counties/<county>/<year>'
 ```
 
 > The above command returns JSON structured like this:
@@ -250,11 +250,11 @@ curl -X GET --header 'Accept: application/json' 'http://0.0.0.0:33507/counties/<
 ]
 ```
 
-This endpoint retreives county sale statistics for a given county name and year.
+This endpoint retrieves county sale statistics for a given county name and year.
 
 ##### HTTP Request
 
-`GET http://0.0.0.0:33507/counties/<county>/<year>`
+`GET http://0.0.0.0:33507/api/v1/counties/<county>/<year>`
 
 ##### Query Parameters
 
@@ -273,7 +273,7 @@ Get property sales statistics.
 
 
 ```shell
-curl -X GET --header 'Accept: application/json' 'http://0.0.0.0:33507/properties/'
+curl -X GET --header 'Accept: application/json' 'http://0.0.0.0:33507/api/v1/properties/'
 ```
 
 > The above command returns JSON structured like this:
@@ -298,7 +298,7 @@ This endpoint retrieves all properties.
 
 ##### HTTP Request
 
-`GET http://0.0.0.0:33507/properties/`
+`GET http://0.0.0.0:33507/api/v1/properties/`
 
 ##### Query Parameters
 
@@ -315,7 +315,7 @@ This endpoint retrieves all properties.
 #### Get Property By ID
 
 ```shell
-curl -X GET --header 'Accept: application/json' 'http://0.0.0.0:33507/properties/<id>'
+curl -X GET --header 'Accept: application/json' 'http://0.0.0.0:33507/api/v1/properties/<id>'
 ```
 
 > The above command returns JSON structured like this:
@@ -338,7 +338,7 @@ This endpoint retrieves a property by ID
 
 ###### HTTP Request
 
-`GET http://0.0.0.0:33507/properties/<id>`
+`GET http://0.0.0.0:33507/api/v1/properties/<id>`
 
 ###### Query Parameters
 
@@ -351,7 +351,7 @@ This endpoint retrieves a property by ID
 #### Search Properties
 
 ```shell
-curl -X GET --header 'Accept: application/json' 'http://0.0.0.0:33507/properties/search/<search_term>'
+curl -X GET --header 'Accept: application/json' 'http://0.0.0.0:33507/api/v1/properties/search/<search_term>'
 ```
 
 > The above command returns JSON structured like this:
@@ -387,7 +387,7 @@ This endpoint retrieves property listings for the given search query.
 
 ##### HTTP Request
 
-`GET http://0.0.0.0:33507/properties/search/<search_term>`
+`GET http://0.0.0.0:33507/api/v1/properties/search/<search_term>`
 
 ##### Query Parameters
 

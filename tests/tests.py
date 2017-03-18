@@ -3,7 +3,7 @@ import requests
 
 
 class ApiTest(unittest.TestCase):
-    base = 'http://0.0.0.0:33507/'
+    base = 'http://0.0.0.0:33507/api/v1/'
 
     def call(self, method):
         req = requests.get(url=self.base + method)

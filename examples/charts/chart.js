@@ -4,7 +4,7 @@
 
 google.load('visualization', '1.0', {'packages': ['corechart', 'table'], 'callback': drawCharts});
 
-var URL = 'http://0.0.0.0:33507/';
+var URL = 'http://0.0.0.0:33507/api/v1/';
 
 function ajax(url) {
     return $.ajax({
