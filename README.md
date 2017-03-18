@@ -406,6 +406,9 @@ This endpoint retrieves property listings for the given search query.
 
 You can find some JavaScript and Python examples in the ```examples``` folder.
 
+## Rate Limits
+
+The Smartmove API includes rate limiting. The API allows 2,000 requests per day and 100 requests per hour.
 
 ## Online Demo
 
