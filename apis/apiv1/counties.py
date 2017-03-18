@@ -8,15 +8,15 @@ import settings
 api = Namespace('counties', description='Get property sale statistics for each county')
 
 county = api.model('County', {
-    'id': fields.String(required=True, description='The get_county_price identifier'),
-    'county_name': fields.String(required=True, description='The get_county_price name.'),
+    'id': fields.String(required=True, description='The county identifier'),
+    'county_name': fields.String(required=True, description='The county name.'),
     'average_sale_price': fields.String(description='The average sale price.'),
     'total_number_of_sales': fields.String(description="The total number of sales."),
 })
 
 year_stats = api.model('Year', {
-    'id': fields.String(required=True, description='The get_county_price identifier'),
-    'county_name': fields.String(required=True, description='The get_county_price name.'),
+    'id': fields.String(required=True, description='The county identifier'),
+    'county_name': fields.String(required=True, description='The county name.'),
     'average_sale_price': fields.String(description='The average sale price.'),
     'total_number_of_sales': fields.String(description="The total number of sales."),
     'year': fields.String(description="Year")
