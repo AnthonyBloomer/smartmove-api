@@ -18,6 +18,8 @@ python app.py
 
 ### Charts
 
+Get JSON data that can easily be consumed by the Google Charts API.
+
 #### Line Chart
 
 ```shell
@@ -120,6 +122,8 @@ This endpoint returns the average sale price for each county.
 
 
 ### Counties
+
+Get property sale statistics for each county.
 
 #### Get All Counties
 
@@ -262,6 +266,8 @@ This endpoint retreives county sale statistics for a given county name and year.
 
 
 ### Properties
+
+Get property sales statistics.
 
 #### Get All Properties
 
