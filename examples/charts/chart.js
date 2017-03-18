@@ -4,7 +4,7 @@
 
 google.load('visualization', '1.0', {'packages': ['corechart', 'table'], 'callback': drawCharts});
 
-const URL = 'http://0.0.0.0:33507/';
+var URL = 'http://0.0.0.0:33507/';
 
 function ajax(url) {
     return $.ajax({
@@ -89,7 +89,7 @@ function get_table_data() {
 
 function drawCharts() {
     draw_pie();
-    get_county_price(county = 'dublin');
+    get_county_price('dublin');
     get_table_data();
     new_dwelling_sales();
     new_dwelling_prices();
@@ -97,5 +97,5 @@ function drawCharts() {
 
 
 $("#county-avg").click(function () {
-    get_county_price(county = $("#option").val());
+    get_county_price($("#option").val());
 });

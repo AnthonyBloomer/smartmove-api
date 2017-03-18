@@ -15,7 +15,7 @@ api = Namespace('charts', description='Get JSON data that can easily be consumed
 class Chart(Resource):
     def get(self, county_name):
         """
-        Description: Get average sale price for each year for the given county.
+        Description: Get the average sale price for each year for the given county.
         :return: JSON
         """
         if request.args.get('api_key') and validate_key(request.args.get('api_key')) or settings.env == 'TESTING':
@@ -39,18 +39,18 @@ class Chart(Resource):
 
 @api.route('/counties/average-sale-price')
 @api.param('api_key', 'Your API key.')
-@api.param('per_page', 'The number of results we will show. Default is 10.')
+@api.param('per_page', 'The number of results to be shown. The default number is 10.')
 @api.response(401, 'Invalid API key.')
 class Pie(Resource):
     def get(self):
         """
-        Description: Get average sale price for each county.
+        Description: Get the average sale price for each county.
         :return: JSON
         """
         if request.args.get('api_key') and validate_key(request.args.get('api_key')) or settings.env == 'TESTING':
             per_page = 10
             if request.args.get('per_page'):
-                per_page = request.args.get('per_page')
+                per_page = int(request.args.get('per_page'))
             params = []
             sql = 'select d.county_name as County, f.average_sale_price as Price from fact_county as f ' \
                   'inner join dim_county as d on d.id = f.county_id order by Price desc limit %s, %s'
@@ -76,7 +76,7 @@ class Pie(Resource):
 class Table(Resource):
     def get(self):
         """
-        Description: Get average sale price and number of sales for each town.
+        Description: Get the average sale price and number of sales for each town.
         :return: JSON
         """
         if request.args.get('api_key') and validate_key(request.args.get('api_key')) or settings.env == 'TESTING':
@@ -106,7 +106,7 @@ class Table(Resource):
 class DwellingNumOfSales(Resource):
     def get(self):
         """
-        Description: Get number of sales of new dwellings between 2010-2016
+        Description: Get the number of sales of new dwellings between 2010-2016
         :return: JSON
         """
         if request.args.get('api_key') and validate_key(request.args.get('api_key')) or settings.env == 'TESTING':
@@ -136,7 +136,7 @@ class DwellingNumOfSales(Resource):
 class DwellingAverageSalePrice(Resource):
     def get(self):
         """
-        Description: Get average sale price of new dwellings between 2010-2016
+        Description: Get the average sale price of new dwellings between 2010-2016
         :return: JSON
         """
         if request.args.get('api_key') and validate_key(request.args.get('api_key')) or settings.env == 'TESTING':

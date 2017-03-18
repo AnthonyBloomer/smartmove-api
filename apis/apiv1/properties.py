@@ -8,10 +8,12 @@ import settings
 
 api = Namespace('properties', description='Property related operations')
 
-property = api.model('Property', {
+property_model = api.model('Property', {
     'id': fields.String(required=True, description='The property identifier'),
     'address': fields.String(required=True, description='The address of the property.'),
     'county_name': fields.String(required=True, description='The get_county_price.'),
+    'latitude': fields.String(required=True, description='The county latitude'),
+    'longitude': fields.String(required=True, description='The county longitude'),
     'sale_type': fields.String(required=True, description="The sale type"),
     'description': fields.String(required=True, description='The description of the property.'),
     'date_time': fields.String(required=True, description='The date of sale.'),
@@ -30,7 +32,7 @@ property = api.model('Property', {
 @api.response(401, 'Invalid API key.')
 class Property(Resource):
     @api.doc('list_properties')
-    @api.marshal_list_with(property)
+    @api.marshal_list_with(property_model)
     def get(self):
         """
         Description: Get all properties.
@@ -45,7 +47,7 @@ class Property(Resource):
 
         if request.args.get('api_key') and validate_key(request.args.get('api_key')) or settings.env == 'TESTING':
 
-            sql = "select p.id, p.address, p.sale_type, p.date_time, p.description, p.price, c.county_name " \
+            sql = "select p.id, p.address, p.sale_type, p.date_time, p.description, p.price, c.county_name, c.longitude, c.latitude " \
                   "from smartmove.properties as p " \
                   "left join smartmove.counties as c " \
                   "on p.county_id = c.id " \
@@ -93,7 +95,7 @@ class Property(Resource):
 @api.response(401, 'Invalid API key.')
 class GetPropertyById(Resource):
     @api.doc('get_property_by_id')
-    @api.marshal_with(property)
+    @api.marshal_with(property_model)
     def get(self, id):
         """
         Description: Get a property by ID.
@@ -126,7 +128,7 @@ class GetPropertyById(Resource):
 @api.response(401, 'Invalid API key.')
 class PropertySearch(Resource):
     @api.doc('search')
-    @api.marshal_with(property)
+    @api.marshal_with(property_model)
     def get(self, search_term):
         """
         Description: Search properties.

@@ -22,7 +22,7 @@ class Country(Resource):
     @api.marshal_list_with(country)
     def get(self):
         """
-        Description: Get a list of country statistics.
+        Description: Get a list of country sale statistics.
         :return: JSON
         """
         if request.args.get('api_key') and validate_key(request.args.get('api_key')) or settings.env == 'TESTING':

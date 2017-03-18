@@ -33,7 +33,7 @@ class County(Resource):
     @api.marshal_list_with(county)
     def get(self):
         """
-        Description: Get a list of get_county_price statistics.
+        Description: Get a list of county property sale statistics.
         :return: JSON
         """
 
@@ -67,7 +67,7 @@ class GetCountyById(Resource):
     @api.marshal_with(county)
     def get(self, id):
         """
-        Description: Get get_county_price statistics for a given ID.
+        Description: Get county sale statistics for a given ID.
         :return: JSON
         """
 
@@ -93,7 +93,7 @@ class YearSalesForCounties(Resource):
     @api.marshal_with(year_stats)
     def get(self, county_name, year):
         """
-        Description: Retreive get_county_price statistics for a given county name and year.
+        Description: Retrieve county sale statistics for a given county name and year.
         :return: JSON
         """
 

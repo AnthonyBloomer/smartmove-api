@@ -24,7 +24,7 @@ class Town(Resource):
     @api.marshal_list_with(town)
     def get(self):
         """
-        Description: Get a list of town statistics.
+        Description: Get a list of town property sale statistics.
         :return: JSON
         """
         if request.args.get('api_key') and validate_key(request.args.get('api_key')) or settings.env == 'TESTING':
@@ -62,7 +62,7 @@ class GetTownById(Resource):
     @api.marshal_with(town)
     def get(self, id):
         """
-        Description: Get statistics for a town by its ID.
+        Description: Get property sale statistics for a town by its ID.
         :return: JSON
         """
         if request.args.get('api_key') and validate_key(request.args.get('api_key')) or settings.env == 'TESTING':
@@ -85,7 +85,7 @@ class Compare(Resource):
     @api.marshal_with(town)
     def get(self):
         """
-        Description: Compare statistics between two towns.
+        Description: Compare property sale statistics between two towns.
         :return: JSON
         """
         if request.args.get('api_key') and validate_key(request.args.get('api_key')) or settings.env == 'TESTING':
