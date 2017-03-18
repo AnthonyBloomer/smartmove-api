@@ -5,7 +5,7 @@ from flask import request
 from core.utils import paginate
 import settings
 
-api = Namespace('counties', description='Get property sale statistics for each get_county_price')
+api = Namespace('counties', description='Get property sale statistics for each county')
 
 county = api.model('County', {
     'id': fields.String(required=True, description='The get_county_price identifier'),
