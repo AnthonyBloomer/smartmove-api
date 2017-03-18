@@ -404,7 +404,7 @@ This endpoint retrieves property listings for the given search query.
 
 ## Examples
 
-You can find some JavaScript and Python examples in the ```examples``` folder.
+You can find some JavaScript and Python examples in the [examples](https://github.com/AnthonyBloomer/smartmove-api/tree/master/examples) folder.
 
 ## Rate Limits
 
@@ -415,4 +415,4 @@ The Smartmove API includes rate limiting. The API allows 2,000 requests per day 
 Currently migrating from local machine to Heroku and right now is incomplete   
 No API key is required to run the API methods.
 
-https://smartmove-api.herokuapp.com
+[View on Heroku](https://smartmove-api.herokuapp.com)
