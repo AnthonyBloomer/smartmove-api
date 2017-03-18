@@ -5,7 +5,6 @@ This API is being built as part of my final year software project, Smartmove, a 
 
 [You can find the database schema, SQL procedures and other load scripts needed here.](https://github.com/AnthonyBloomer/smartmove-load-scripts)
 
-
 ## Installation
 
 ```
@@ -14,6 +13,388 @@ source env/bin/activate
 pip install -r requirements.txt
 python app.py
 ```
+
+## Endpoints
+
+### Charts
+
+#### Line Chart
+
+```shell
+curl -X GET --header 'Accept: application/json' 'http://0.0.0.0:33507/charts/<county_name>'
+```
+
+> The above command returns JSON structured like this:
+
+```json
+{
+  "cols": [
+    {
+      "id": "Year",
+      "label": "Year",
+      "type": "number"
+    },
+    {
+      "id": "Price",
+      "label": "Price",
+      "type": "number"
+    }
+  ],
+  "rows": [
+    {
+      "c": [
+        {
+          "v": 2010
+        },
+        {
+          "v": 333401
+        }
+      ]
+    }
+  ]
+}
+```
+
+This endpoint returns the average sale price for each year for a given county.
+
+##### HTTP Request
+
+`GET http://0.0.0.0:33507/charts/<county_name>`
+
+##### Query Parameters
+
+| Parameter  | Description                                  |
+|------------|----------------------------------------------|                         
+| county_name    | The county name.                         |
+| api_key    | Your API Key.                                |
+
+#### Pie Chart
+
+```shell
+curl -X GET --header 'Accept: application/json' 'http://0.0.0.0:33507/charts/counties/average-sale-price'
+```
+
+> The above command returns JSON structured like this:
+
+```json
+{
+  "cols": [
+    {
+      "id": "County",
+      "label": "County",
+      "type": "string"
+    },
+    {
+      "id": "Price",
+      "label": "Price",
+      "type": "number"
+    }
+  ],
+  "rows": [
+    {
+      "c": [
+        {
+          "v": "Dublin"
+        },
+        {
+          "v": 355355.15
+        }
+      ]
+    }
+  ]
+}
+```
+
+This endpoint returns the average sale price for each county.
+
+##### HTTP Request
+
+`http://0.0.0.0:33507/charts/counties/average-sale-price`
+
+##### Query Parameters
+
+| Parameter  | Description                                  |
+|------------|----------------------------------------------|                         
+| county_name    | The county name.                         |
+| api_key    | Your API Key.                                |
+
+
+### Counties
+
+#### Get All Counties
+
+
+
+```shell
+curl -X GET --header 'Accept: application/json' 'http://0.0.0.0:33507/counties/'
+```
+
+> The above command returns JSON structured like this:
+
+```json
+[
+  {
+    "average_sale_price": "131576.43",
+    "county_name": "Carlow",
+    "id": "1",
+    "total_number_of_sales": "2424"
+  }
+]
+```
+
+This endpoint retrieves a list of county sale statistics.
+
+##### HTTP Request
+
+`GET http://0.0.0.0:33507/counties/`
+
+##### Query Parameters
+
+| Parameter  | Description                                  |
+|------------|----------------------------------------------|
+| sort_by    | The sort type.                               |
+| sort_order | The sort order.                              |
+| api_key    | Your API key.                                |
+
+#### Get County By ID
+
+```shell
+curl -X GET --header 'Accept: application/json' 'http://0.0.0.0:33507/counties/<id>'
+```
+
+> The above command returns JSON structured like this:
+
+```json
+{
+  "average_sale_price": "100182.68",
+  "county_name": "Cavan",
+  "id": "2",
+  "total_number_of_sales": "3842"
+}
+```
+
+This endpoint retrieves a county by ID
+
+##### HTTP Request
+
+`GET http://0.0.0.0:33507/counties/<id>`
+
+##### Query Parameters
+
+| Parameter  | Description                                  |
+|------------|----------------------------------------------|
+| id         | The county Identifier.                       |
+| api_key    | Your API key.                                |
+
+#### County comparison
+
+```shell
+curl -X GET --header 'Accept: application/json' 'http://0.0.0.0:33507/counties/compare?county1=<county1>&county1=<county2>'
+```
+
+> The above command returns JSON structured like this:
+
+```json
+[
+  {
+    "average_sale_price": "196669.81",
+    "county_name": "Cork",
+    "id": null,
+    "total_number_of_sales": "25367"
+  },
+  {
+    "average_sale_price": "355355.15",
+    "county_name": "Dublin",
+    "id": null,
+    "total_number_of_sales": "75449"
+  }
+]
+```
+
+This endpoint compares sale statistics between two counties.
+
+##### HTTP Request
+
+`GET http://0.0.0.0:33507/counties/compare?county2=<county2>&county1=<county1>`
+
+##### Query Parameters
+
+| Parameter  | Description                                  |
+|------------|----------------------------------------------|
+| api_key    | Your API key.                                |
+| county1    | The first county                             |
+| county2    | The second county                            |
+
+
+#### County Statistics by Year
+
+```shell
+curl -X GET --header 'Accept: application/json' 'http://0.0.0.0:33507/counties/<county>/<year>'
+```
+
+> The above command returns JSON structured like this:
+
+```json
+[
+  {
+    "average_sale_price": "412000",
+    "county_name": "Dublin",
+    "id": "42",
+    "total_number_of_sales": "14592",
+    "year": "2016"
+  }
+]
+```
+
+This endpoint retreives county sale statistics for a given county name and year.
+
+##### HTTP Request
+
+`GET http://0.0.0.0:33507/counties/<county>/<year>`
+
+##### Query Parameters
+
+| Parameter  | Description                                  |
+|------------|----------------------------------------------|
+| api_key    | Your API key.                                |
+| county   | The county name                      |
+| year    | The year                           |
+
+
+### Properties
+
+#### Get All Properties
+
+
+```shell
+curl -X GET --header 'Accept: application/json' 'http://0.0.0.0:33507/properties/'
+```
+
+> The above command returns JSON structured like this:
+
+```json
+[
+  {
+    "address": "5 Braemor Drive, Churchtown, Co.Dublin",
+    "county_name": "Dublin",
+    "date_time": "2010-01-01 00:00:00",
+    "description": "Second-Hand Dwelling house /Apartment",
+    "id": "1",
+    "latitude": "53.3498",
+    "longitude": "-6.26031",
+    "price": "343000.00",
+    "sale_type": "1"
+  }
+]
+```
+
+This endpoint retrieves all properties.
+
+##### HTTP Request
+
+`GET http://0.0.0.0:33507/properties/`
+
+##### Query Parameters
+
+| Parameter  | Description                                  |
+|------------|----------------------------------------------|
+| page       | The page number.                             |
+| api_key    | Your API key.                                |
+| from_date  | The year to retrieve property listings from. |
+| to_date    | The year to retrieve property listings to.   |
+| country_id | The country ID.                              |
+| sale_type  | The property sale type.                      |
+
+
+#### Get Property By ID
+
+```shell
+curl -X GET --header 'Accept: application/json' 'http://0.0.0.0:33507/properties/<id>'
+```
+
+> The above command returns JSON structured like this:
+
+```json
+{
+  "address": "5 Braemor Drive, Churchtown, Co.Dublin",
+  "county_name": "Dublin",
+  "date_time": "2010-01-01 00:00:00",
+  "description": "Second-Hand Dwelling house /Apartment",
+  "id": "1",
+  "latitude": "53.3498",
+  "longitude": "-6.26031",
+  "price": "343000.00",
+  "sale_type": "1"
+}
+```
+
+This endpoint retrieves a property by ID
+
+###### HTTP Request
+
+`GET http://0.0.0.0:33507/properties/<id>`
+
+###### Query Parameters
+
+| Parameter  | Description                                  |
+|------------|----------------------------------------------|
+| id         | The Property Identifier.                     |
+| api_key    | Your API key.                                |
+
+
+#### Search Properties
+
+```shell
+curl -X GET --header 'Accept: application/json' 'http://0.0.0.0:33507/properties/search/<search_term>'
+```
+
+> The above command returns JSON structured like this:
+
+```json
+[
+  {
+    "address": "5 Braemor Drive, Churchtown, Co.Dublin",
+    "county_name": "Dublin",
+    "date_time": "2010-01-01 00:00:00",
+    "description": "Second-Hand Dwelling house /Apartment",
+    "id": "1",
+    "latitude": "53.3498",
+    "longitude": "-6.26031",
+    "price": "343000.00",
+    "sale_type": "1"
+  },
+  {
+    "address": "1 Meadow Avenue, Dundrum, Dublin 14",
+    "county_name": "Dublin",
+    "date_time": "2010-01-04 00:00:00",
+    "description": "Second-Hand Dwelling house /Apartment",
+    "id": "3",
+    "latitude": "53.3498",
+    "longitude": "-6.26031",
+    "price": "438500.00",
+    "sale_type": "1"
+  }
+]
+```
+
+This endpoint retrieves property listings for the given search query.
+
+##### HTTP Request
+
+`GET http://0.0.0.0:33507/properties/search/<search_term>`
+
+##### Query Parameters
+
+| Parameter  | Description                                  |
+|------------|----------------------------------------------|
+| page       | The page number.                             |
+| api_key    | Your API key.                                |
+| from_date  | The year to retrieve property listings from. |
+| to_date    | The year to retrieve property listings to.   |
+| country_id | The country ID.                              |
+| sale_type  | The property sale type.                      |
+| search_term | The search query                            |
+
 
 ## Examples
 
