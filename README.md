@@ -203,13 +203,13 @@ curl -X GET --header 'Accept: application/json' 'http://0.0.0.0:33507/counties/c
   {
     "average_sale_price": "196669.81",
     "county_name": "Cork",
-    "id": null,
+    "id": 6,
     "total_number_of_sales": "25367"
   },
   {
     "average_sale_price": "355355.15",
     "county_name": "Dublin",
-    "id": null,
+    "id": 9,
     "total_number_of_sales": "75449"
   }
 ]

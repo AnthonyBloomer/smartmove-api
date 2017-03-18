@@ -129,7 +129,8 @@ class Compare(Resource):
         :return: JSON
         """
         if request.args.get('api_key') and validate_key(request.args.get('api_key')) or settings.env == 'TESTING':
-            sql = 'select f.total_number_of_sales, f.average_sale_price, d.county_name from fact_county as f ' \
+            sql = 'select f.county_id as id, f.total_number_of_sales, f.average_sale_price, d.county_name ' \
+                  'from fact_county as f ' \
                   'join dim_county as d ' \
                   'on f.county_id = d.id ' \
                   'where d.county_name like %s ' \
