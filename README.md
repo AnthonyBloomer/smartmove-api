@@ -22,6 +22,8 @@ Get JSON data that can easily be consumed by the Google Charts API.
 
 #### Line Chart
 
+This endpoint returns the average sale price for each year for a given county.
+
 ```shell
 curl -X GET --header 'Accept: application/json' 'http://0.0.0.0:33507/api/v1/charts/<county_name>'
 ```
@@ -57,8 +59,6 @@ curl -X GET --header 'Accept: application/json' 'http://0.0.0.0:33507/api/v1/cha
 }
 ```
 
-This endpoint returns the average sale price for each year for a given county.
-
 ##### HTTP Request
 
 `GET http://0.0.0.0:33507/api/v1/charts/<county_name>`
@@ -71,6 +71,8 @@ This endpoint returns the average sale price for each year for a given county.
 | api_key    | Your API Key.                                |
 
 #### Pie Chart
+
+This endpoint returns the average sale price for each county.
 
 ```shell
 curl -X GET --header 'Accept: application/json' 'http://0.0.0.0:33507/api/v1/charts/counties/average-sale-price'
@@ -107,8 +109,6 @@ curl -X GET --header 'Accept: application/json' 'http://0.0.0.0:33507/api/v1/cha
 }
 ```
 
-This endpoint returns the average sale price for each county.
-
 ##### HTTP Request
 
 `http://0.0.0.0:33507/api/v1/charts/counties/average-sale-price`
@@ -127,7 +127,7 @@ Get property sale statistics for each county.
 
 #### Get All Counties
 
-
+This endpoint retrieves a list of county sale statistics.
 
 ```shell
 curl -X GET --header 'Accept: application/json' 'http://0.0.0.0:33507/api/v1/counties/'
@@ -146,8 +146,6 @@ curl -X GET --header 'Accept: application/json' 'http://0.0.0.0:33507/api/v1/cou
 ]
 ```
 
-This endpoint retrieves a list of county sale statistics.
-
 ##### HTTP Request
 
 `GET http://0.0.0.0:33507/api/v1/counties/`
@@ -161,6 +159,8 @@ This endpoint retrieves a list of county sale statistics.
 | api_key    | Your API key.                                |
 
 #### Get County By ID
+
+This endpoint retrieves a county by ID
 
 ```shell
 curl -X GET --header 'Accept: application/json' 'http://0.0.0.0:33507/api/v1/counties/<id>'
@@ -177,8 +177,6 @@ curl -X GET --header 'Accept: application/json' 'http://0.0.0.0:33507/api/v1/cou
 }
 ```
 
-This endpoint retrieves a county by ID
-
 ##### HTTP Request
 
 `GET http://0.0.0.0:33507/api/v1/counties/<id>`
@@ -191,6 +189,9 @@ This endpoint retrieves a county by ID
 | api_key    | Your API key.                                |
 
 #### County comparison
+
+
+This endpoint compares sale statistics between two counties.
 
 ```shell
 curl -X GET --header 'Accept: application/json' 'http://0.0.0.0:33507/api/v1/counties/compare?county1=<county1>&county1=<county2>'
@@ -215,8 +216,6 @@ curl -X GET --header 'Accept: application/json' 'http://0.0.0.0:33507/api/v1/cou
 ]
 ```
 
-This endpoint compares sale statistics between two counties.
-
 ##### HTTP Request
 
 `GET http://0.0.0.0:33507/api/v1/counties/compare?county2=<county2>&county1=<county1>`
@@ -231,6 +230,8 @@ This endpoint compares sale statistics between two counties.
 
 
 #### County Statistics by Year
+
+This endpoint retrieves county sale statistics for a given county name and year.
 
 ```shell
 curl -X GET --header 'Accept: application/json' 'http://0.0.0.0:33507/api/v1/counties/<county>/<year>'
@@ -249,8 +250,6 @@ curl -X GET --header 'Accept: application/json' 'http://0.0.0.0:33507/api/v1/cou
   }
 ]
 ```
-
-This endpoint retrieves county sale statistics for a given county name and year.
 
 ##### HTTP Request
 
@@ -271,6 +270,7 @@ Get property sales statistics.
 
 #### Get All Properties
 
+This endpoint retrieves all properties.
 
 ```shell
 curl -X GET --header 'Accept: application/json' 'http://0.0.0.0:33507/api/v1/properties/'
@@ -294,8 +294,6 @@ curl -X GET --header 'Accept: application/json' 'http://0.0.0.0:33507/api/v1/pro
 ]
 ```
 
-This endpoint retrieves all properties.
-
 ##### HTTP Request
 
 `GET http://0.0.0.0:33507/api/v1/properties/`
@@ -313,6 +311,8 @@ This endpoint retrieves all properties.
 
 
 #### Get Property By ID
+
+This endpoint retrieves a property by ID
 
 ```shell
 curl -X GET --header 'Accept: application/json' 'http://0.0.0.0:33507/api/v1/properties/<id>'
@@ -334,8 +334,6 @@ curl -X GET --header 'Accept: application/json' 'http://0.0.0.0:33507/api/v1/pro
 }
 ```
 
-This endpoint retrieves a property by ID
-
 ###### HTTP Request
 
 `GET http://0.0.0.0:33507/api/v1/properties/<id>`
@@ -349,6 +347,8 @@ This endpoint retrieves a property by ID
 
 
 #### Search Properties
+
+This endpoint retrieves property listings for the given search query.
 
 ```shell
 curl -X GET --header 'Accept: application/json' 'http://0.0.0.0:33507/api/v1/properties/search/<search_term>'
@@ -382,8 +382,6 @@ curl -X GET --header 'Accept: application/json' 'http://0.0.0.0:33507/api/v1/pro
   }
 ]
 ```
-
-This endpoint retrieves property listings for the given search query.
 
 ##### HTTP Request
 

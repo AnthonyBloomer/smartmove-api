@@ -135,7 +135,6 @@ class PropertySearch(Resource):
         :return: JSON
         """
         if request.args.get('api_key') and validate_key(request.args.get('api_key')) or settings.env == 'TESTING':
-            order_by = ['price', 'id', 'date']
             sale_type = 1
             country_id = 1
             params = []
