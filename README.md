@@ -264,6 +264,119 @@ curl -X GET --header 'Accept: application/json' 'http://0.0.0.0:33507/api/v1/cou
 | year    | The year                           |
 
 
+### Towns
+
+Get property sale statistics for each town.
+
+#### Get all towns.
+
+Get a list of town sale statistics.
+
+```shell
+curl -X GET --header 'Accept: application/json' 'http://0.0.0.0:33507/api/v1/towns/'
+```
+
+> The above command returns JSON structured like this:
+
+```json
+[
+  {
+    "average_sale_price": "109899.44",
+    "id": "1",
+    "total_number_of_sales": "177",
+    "town_name": "Abbeyfeale"
+  },
+  {
+    "average_sale_price": "85346.15",
+    "id": "2",
+    "total_number_of_sales": "13",
+    "town_name": "Achill Island"
+  }
+ ]
+
+```
+##### HTTP Request
+
+`http://0.0.0.0:33507/api/v1/towns/`
+
+| Parameter  | Description                                  |
+|------------|----------------------------------------------|
+| api_key    | Your API key.                                |
+| sort_by    | The sort type. Result can be sorted by ID or price.         |
+| sort_order | The sort order. Can be set to asc or desc    |
+
+#### Get Town By ID
+
+This endpoint retrieves a town by ID
+
+```shell
+curl -X GET --header 'Accept: application/json' 'http://0.0.0.0:33507/api/v1/towns/<id>'
+```
+
+> The above command returns JSON structured like this:
+
+```json
+{
+  "average_sale_price": "226649.47",
+  "id": "8",
+  "total_number_of_sales": "787",
+  "town_name": "Ashbourne"
+}
+```
+
+###### HTTP Request
+
+`GET http://0.0.0.0:33507/api/v1/towns/<id>`
+
+###### Query Parameters
+
+| Parameter  | Description                                  |
+|------------|----------------------------------------------|
+| id         | The Town Identifier.                     |
+| api_key    | Your API key.                                |
+
+
+#### Town comparison
+
+
+This endpoint compares sale statistics between two towns.
+
+```shell
+curl -X GET --header 'Accept: application/json' 'http://0.0.0.0:33507/api/v1/towns/compare?town2=<town>&town1=<town>'
+```
+
+> The above command returns JSON structured like this:
+
+```json
+[
+  {
+    "average_sale_price": "263969.22",
+    "id": "3",
+    "total_number_of_sales": "199",
+    "town_name": "Adare"
+  },
+  {
+    "average_sale_price": "222968.23",
+    "id": "28",
+    "total_number_of_sales": "733",
+    "town_name": "Blanchardstown"
+  }
+]
+```
+
+##### HTTP Request
+
+`GET http://0.0.0.0:33507/api/v1/towns/compare?town2=<town1>&town1=<town2>`
+
+##### Query Parameters
+
+| Parameter  | Description                                  |
+|------------|----------------------------------------------|
+| api_key    | Your API key.                                |
+| town1    | The first town                                 |
+| town2    | The second town                                |
+
+
 ### Properties
 
 Get property sales statistics.
