@@ -521,6 +521,11 @@ You can find some JavaScript and Python examples in the [examples](https://githu
 
 The Smartmove API includes rate limiting. The API allows 2,000 requests per day and 100 requests per hour.
 
+## Authentication
+
+Smartmove requires authentication. To use the Smartmove API, you must include an API key when loading the API. Please note this feature is disabled by default when running the API locally.
+
+
 ## Online Demo
 
 Currently migrating from local machine to Heroku and right now is incomplete   
