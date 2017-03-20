@@ -1,8 +1,7 @@
 from flask import request
 from gvizapi import gviz_api
 import json
-import settings
-import pymysql
+from .connection import conn
 
 
 def paginate(page=0, per_page=25):
@@ -28,17 +27,11 @@ def gviz_json(desc, data, columns_order=None, order_by=None):
 
 def validate_key(api_key):
     try:
-        conn2 = pymysql.connect(host=settings.DB_HOST,
-                                user=settings.DB_USER,
-                                password=settings.DB_PASSWORD,
-                                db='sm_home',
-                                charset='utf8mb4',
-                                cursorclass=pymysql.cursors.DictCursor)
+        with conn.cursor() as cursor:
+            sql = "select * from sm_home.api_keys where api_key = %s"
+            cursor.execute(sql, api_key)
+            result = cursor.fetchone()
+            if result:
+                return True
     except:
         return False
-    with conn2.cursor() as cursor:
-        sql = "select * from api_keys where api_key = %s"
-        cursor.execute(sql, api_key)
-        result = cursor.fetchone()
-        if result:
-            return True
