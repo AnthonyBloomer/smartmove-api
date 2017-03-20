@@ -523,7 +523,7 @@ The Smartmove API includes rate limiting. The API allows 2,000 requests per day 
 
 ## Authentication
 
-Smartmove requires authentication. To use the Smartmove API, you must include an API key when loading the API. Please note this feature is disabled by default when running the API locally.
+The Smartmove API requires authentication. To use the Smartmove API, you must include an API key when loading the API. Please note this feature is disabled by default when running the API locally.
 
 
 ## Online Demo
