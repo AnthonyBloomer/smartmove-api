@@ -1,7 +1,8 @@
 # Database settings
-host = '127.0.0.1'
-user = 'root'
-password = ''
-db = 'smartmove_data_warehouse'
+DB_HOST = '127.0.0.1'
+DB_USER = 'root'
+DB_PASSWORD = ''
+DB_NAME = 'smartmove_data_warehouse'
 
-env = 'TESTING'
+# Development environment.
+ENV = 'TESTING'

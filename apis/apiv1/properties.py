@@ -45,7 +45,7 @@ class Property(Resource):
         from_date = '2010'
         to_date = now.year
 
-        if request.args.get('api_key') and validate_key(request.args.get('api_key')) or settings.env == 'TESTING':
+        if request.args.get('api_key') and validate_key(request.args.get('api_key')) or settings.ENV == 'TESTING':
 
             sql = "select p.id, p.address, p.sale_type, p.date_time, p.description, p.price, c.county_name, c.longitude, c.latitude " \
                   "from smartmove.properties as p " \
@@ -101,7 +101,7 @@ class GetPropertyById(Resource):
         Description: Get a property by ID.
         :return: JSON
         """
-        if request.args.get('api_key') and validate_key(request.args.get('api_key')) or settings.env == 'TESTING':
+        if request.args.get('api_key') and validate_key(request.args.get('api_key')) or settings.ENV == 'TESTING':
 
             sql = "select * from smartmove.properties as p " \
                   "join smartmove.counties as c " \
@@ -134,7 +134,7 @@ class PropertySearch(Resource):
         Description: Search properties.
         :return: JSON
         """
-        if request.args.get('api_key') and validate_key(request.args.get('api_key')) or settings.env == 'TESTING':
+        if request.args.get('api_key') and validate_key(request.args.get('api_key')) or settings.ENV == 'TESTING':
             sale_type = 1
             country_id = 1
             params = []

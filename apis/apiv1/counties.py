@@ -37,7 +37,7 @@ class County(Resource):
         :return: JSON
         """
 
-        if request.args.get('api_key') and validate_key(request.args.get('api_key')) or settings.env == 'TESTING':
+        if request.args.get('api_key') and validate_key(request.args.get('api_key')) or settings.ENV == 'TESTING':
             sort_by = 'f.id'
             sort_order = 'asc'
 
@@ -71,7 +71,7 @@ class GetCountyById(Resource):
         :return: JSON
         """
 
-        if request.args.get('api_key') and validate_key(request.args.get('api_key')) or settings.env == 'TESTING':
+        if request.args.get('api_key') and validate_key(request.args.get('api_key')) or settings.ENV == 'TESTING':
             sql = 'select * from fact_county as f join dim_county as c on f.county_id = c.id where f.id = %s'
             with conn.cursor() as cursor:
                 cursor.execute(sql, id)
@@ -97,7 +97,7 @@ class YearSalesForCounties(Resource):
         :return: JSON
         """
 
-        if request.args.get('api_key') and validate_key(request.args.get('api_key')) or settings.env == 'TESTING':
+        if request.args.get('api_key') and validate_key(request.args.get('api_key')) or settings.ENV == 'TESTING':
             params = [county_name, year]
             sql = "select * from fact_year as f " \
                   "join dim_county as d on d.id = f.county_id " \
@@ -128,7 +128,7 @@ class Compare(Resource):
         Description: Compare sale statistics between two counties.
         :return: JSON
         """
-        if request.args.get('api_key') and validate_key(request.args.get('api_key')) or settings.env == 'TESTING':
+        if request.args.get('api_key') and validate_key(request.args.get('api_key')) or settings.ENV == 'TESTING':
             sql = 'select f.county_id as id, f.total_number_of_sales, f.average_sale_price, d.county_name ' \
                   'from fact_county as f ' \
                   'join dim_county as d ' \

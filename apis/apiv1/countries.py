@@ -25,7 +25,7 @@ class Country(Resource):
         Description: Get a list of country sale statistics.
         :return: JSON
         """
-        if request.args.get('api_key') and validate_key(request.args.get('api_key')) or settings.env == 'TESTING':
+        if request.args.get('api_key') and validate_key(request.args.get('api_key')) or settings.ENV == 'TESTING':
             sql = "select * from fact_country as f join dim_country as c on f.country_id = c.id"
             with conn.cursor() as cursor:
                 cursor.execute(sql)
@@ -48,7 +48,7 @@ class GetCountyById(Resource):
         Description: Get a country by id.
         :return: JSON
         """
-        if request.args.get('api_key') and validate_key(request.args.get('api_key')) or settings.env == 'TESTING':
+        if request.args.get('api_key') and validate_key(request.args.get('api_key')) or settings.ENV == 'TESTING':
             sql = "select * from fact_country as f join dim_country as c on f.country_id = c.id where f.id = %s"
             with conn.cursor() as cursor:
                 cursor.execute(sql, id)

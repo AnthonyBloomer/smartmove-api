@@ -27,7 +27,7 @@ class Town(Resource):
         Description: Get a list of town property sale statistics.
         :return: JSON
         """
-        if request.args.get('api_key') and validate_key(request.args.get('api_key')) or settings.env == 'TESTING':
+        if request.args.get('api_key') and validate_key(request.args.get('api_key')) or settings.ENV == 'TESTING':
             params = []
             sort_by = 'id'
             sort_order = 'asc'
@@ -65,7 +65,7 @@ class GetTownById(Resource):
         Description: Get property sale statistics for a town by its ID.
         :return: JSON
         """
-        if request.args.get('api_key') and validate_key(request.args.get('api_key')) or settings.env == 'TESTING':
+        if request.args.get('api_key') and validate_key(request.args.get('api_key')) or settings.ENV == 'TESTING':
             sql = "select * from fact_town where id = %s"
             with conn.cursor() as cursor:
                 cursor.execute(sql, id)
@@ -88,7 +88,7 @@ class Compare(Resource):
         Description: Compare property sale statistics between two towns.
         :return: JSON
         """
-        if request.args.get('api_key') and validate_key(request.args.get('api_key')) or settings.env == 'TESTING':
+        if request.args.get('api_key') and validate_key(request.args.get('api_key')) or settings.ENV == 'TESTING':
             sql = 'select * from fact_town where town_name like %s or town_name like %s'
             with conn.cursor() as cursor:
                 cursor.execute(sql, [request.args.get('town1'), request.args.get('town2')])

@@ -18,7 +18,7 @@ class Chart(Resource):
         Description: Get the average sale price for each year for the given county.
         :return: JSON
         """
-        if request.args.get('api_key') and validate_key(request.args.get('api_key')) or settings.env == 'TESTING':
+        if request.args.get('api_key') and validate_key(request.args.get('api_key')) or settings.ENV == 'TESTING':
             sql = 'select average_sale_price as Price, year as Year from fact_year as f ' \
                   'join dim_county as d ' \
                   'on d.id = f.county_id ' \
@@ -47,7 +47,7 @@ class Pie(Resource):
         Description: Get the average sale price for each county.
         :return: JSON
         """
-        if request.args.get('api_key') and validate_key(request.args.get('api_key')) or settings.env == 'TESTING':
+        if request.args.get('api_key') and validate_key(request.args.get('api_key')) or settings.ENV == 'TESTING':
             per_page = 10
             if request.args.get('per_page'):
                 per_page = int(request.args.get('per_page'))
@@ -79,7 +79,7 @@ class Table(Resource):
         Description: Get the average sale price and number of sales for each town.
         :return: JSON
         """
-        if request.args.get('api_key') and validate_key(request.args.get('api_key')) or settings.env == 'TESTING':
+        if request.args.get('api_key') and validate_key(request.args.get('api_key')) or settings.ENV == 'TESTING':
             params = []
             sql = 'select town_name as Town, total_number_of_sales as Count, average_sale_price as Price ' \
                   'from fact_town limit %s, %s'
@@ -109,7 +109,7 @@ class DwellingNumOfSales(Resource):
         Description: Get the number of sales of new dwellings between 2010-2016
         :return: JSON
         """
-        if request.args.get('api_key') and validate_key(request.args.get('api_key')) or settings.env == 'TESTING':
+        if request.args.get('api_key') and validate_key(request.args.get('api_key')) or settings.ENV == 'TESTING':
             params = []
             sql = 'select year(date_time) as Year, count(*) as Count ' \
                   'from smartmove.properties ' \
@@ -139,7 +139,7 @@ class DwellingAverageSalePrice(Resource):
         Description: Get the average sale price of new dwellings between 2010-2016
         :return: JSON
         """
-        if request.args.get('api_key') and validate_key(request.args.get('api_key')) or settings.env == 'TESTING':
+        if request.args.get('api_key') and validate_key(request.args.get('api_key')) or settings.ENV == 'TESTING':
             params = []
             sql = 'select year(date_time) as Year, avg(price) as Price ' \
                   'from smartmove.properties ' \
