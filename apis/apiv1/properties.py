@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 from flask_restplus import Namespace, Resource, fields
 from core.utils import paginate, validate_key
 from flask import request
@@ -47,7 +48,7 @@ class Property(Resource):
 
         if request.args.get('api_key') and validate_key(request.args.get('api_key')) or settings.ENV == 'TESTING':
 
-            sql = "select p.id, p.address, p.sale_type, p.date_time, p.description, p.price, c.county_name, c.longitude, c.latitude " \
+            sql = "select p.id, p.address, p.sale_type, p.date_time, p.description, concat('€', format(price, 2)) as price, c.county_name, c.longitude, c.latitude " \
                   "from smartmove.properties as p " \
                   "left join smartmove.counties as c " \
                   "on p.county_id = c.id " \
@@ -103,7 +104,7 @@ class GetPropertyById(Resource):
         """
         if request.args.get('api_key') and validate_key(request.args.get('api_key')) or settings.ENV == 'TESTING':
 
-            sql = "select * from smartmove.properties as p " \
+            sql = "select p.id, concat('€', format(price, 2)) as price, p.address, c.county_name, c.latitude, c.longitude, p.sale_type, p.description, p.date_time from smartmove.properties as p " \
                   "join smartmove.counties as c " \
                   "on p.county_id = c.id " \
                   "where p.id = %s"
@@ -141,7 +142,7 @@ class PropertySearch(Resource):
             now = datetime.datetime.now()
             from_date = '2010'
             to_date = now.year
-            sql = "select * from smartmove.properties as p " \
+            sql = "select p.id, concat('€', format(price, 2)) as price, p.address, c.county_name, c.latitude, c.longitude, p.sale_type, p.description, p.date_time from smartmove.properties as p " \
                   "join smartmove.counties as c " \
                   "on p.county_id = c.id " \
                   "where p.address like %s " \
