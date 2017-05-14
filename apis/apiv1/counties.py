@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 from flask_restplus import Namespace, Resource, fields
 from core.connection import conn
 from core.utils import validate_key
@@ -46,7 +47,8 @@ class County(Resource):
 
             if request.args.get('sort_order'):
                 sort_order = 'desc' if request.args.get('sort_order') == 'desc' else 'asc'
-            sql = "select * from fact_county as f " \
+            sql = "select f.id, concat('€', format(average_sale_price, 2)) as average_sale_price, total_number_of_sales, county_name " \
+                  "from fact_county as f " \
                   "join dim_county as c on f.county_id = c.id " \
                   "order by %s %s" % (sort_by, sort_order)
             with conn.cursor() as cursor:
@@ -72,7 +74,11 @@ class GetCountyById(Resource):
         """
 
         if request.args.get('api_key') and validate_key(request.args.get('api_key')) or settings.ENV == 'TESTING':
-            sql = 'select * from fact_county as f join dim_county as c on f.county_id = c.id where f.id = %s'
+            sql = 'select f.county_id as id, f.total_number_of_sales, concat("€", format(f.average_sale_price, 2)) as average_sale_price, county_name ' \
+                  'from fact_county as f ' \
+                  'join dim_county as c ' \
+                  'on f.county_id = c.id ' \
+                  'where f.id = %s'
             with conn.cursor() as cursor:
                 cursor.execute(sql, id)
             data = cursor.fetchone()
@@ -99,9 +105,10 @@ class YearSalesForCounties(Resource):
 
         if request.args.get('api_key') and validate_key(request.args.get('api_key')) or settings.ENV == 'TESTING':
             params = [county_name, year]
-            sql = "select * from fact_year as f " \
-                  "join dim_county as d on d.id = f.county_id " \
-                  "where county_name like %s and year = %s limit %s, %s"
+            sql = 'select f.county_id as id, f.year as year, f.total_number_of_sales, concat("€", format(f.average_sale_price, 2)) as average_sale_price, d.county_name ' \
+                  'from fact_year as f ' \
+                  'join dim_county as d on d.id = f.county_id ' \
+                  'where county_name like %s and year = %s limit %s, %s'
 
             for d in paginate():
                 params.append(d)
@@ -129,7 +136,7 @@ class Compare(Resource):
         :return: JSON
         """
         if request.args.get('api_key') and validate_key(request.args.get('api_key')) or settings.ENV == 'TESTING':
-            sql = 'select f.county_id as id, f.total_number_of_sales, f.average_sale_price, d.county_name ' \
+            sql = 'select f.county_id as id, f.total_number_of_sales, concat("€", format(f.average_sale_price, 2)) as average_sale_price, d.county_name ' \
                   'from fact_county as f ' \
                   'join dim_county as d ' \
                   'on f.county_id = d.id ' \
