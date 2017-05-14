@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 from flask_restplus import Namespace, Resource, fields
 from core.connection import conn
 from flask import request
@@ -38,7 +39,9 @@ class Town(Resource):
             if request.args.get('sort_order'):
                 sort_order = 'desc' if request.args.get('sort_order') == 'desc' else 'asc'
 
-            sql = "select * from fact_town order by %s %s " % (sort_by, sort_order)
+            sql = 'select id, total_number_of_sales, town_name, concat("€", format(average_sale_price, 2)) as average_sale_price ' \
+                  'from fact_town ' \
+                  'order by %s %s ' % (sort_by, sort_order)
             sql += "limit %s, %s;"
 
             for d in paginate():
@@ -66,7 +69,9 @@ class GetTownById(Resource):
         :return: JSON
         """
         if request.args.get('api_key') and validate_key(request.args.get('api_key')) or settings.ENV == 'TESTING':
-            sql = "select * from fact_town where id = %s"
+            sql = 'select id, total_number_of_sales, town_name, concat("€", format(average_sale_price, 2)) as average_sale_price ' \
+                  'from fact_town ' \
+                  'where id = %s'
             with conn.cursor() as cursor:
                 cursor.execute(sql, id)
             data = cursor.fetchone()
@@ -89,7 +94,8 @@ class Compare(Resource):
         :return: JSON
         """
         if request.args.get('api_key') and validate_key(request.args.get('api_key')) or settings.ENV == 'TESTING':
-            sql = 'select * from fact_town where town_name like %s or town_name like %s'
+            sql = 'select id, total_number_of_sales, town_name, concat("€", format(average_sale_price, 2)) as average_sale_price ' \
+                  'from fact_town where town_name like %s or town_name like %s'
             with conn.cursor() as cursor:
                 cursor.execute(sql, [request.args.get('town1'), request.args.get('town2')])
             data = cursor.fetchall()
