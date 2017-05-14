@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 from flask_restplus import Namespace, Resource, fields
 from core.connection import conn
 from core.utils import validate_key
@@ -26,7 +27,10 @@ class Country(Resource):
         :return: JSON
         """
         if request.args.get('api_key') and validate_key(request.args.get('api_key')) or settings.ENV == 'TESTING':
-            sql = "select * from fact_country as f join dim_country as c on f.country_id = c.id"
+            sql = 'select f.id, total_number_of_sales, country_name, concat("€", format(f.average_sale_price, 2)) as average_sale_price ' \
+                  'from fact_country as f ' \
+                  'join dim_country as c ' \
+                  'on f.country_id = c.id'
             with conn.cursor() as cursor:
                 cursor.execute(sql)
             data = cursor.fetchall()
@@ -49,7 +53,11 @@ class GetCountyById(Resource):
         :return: JSON
         """
         if request.args.get('api_key') and validate_key(request.args.get('api_key')) or settings.ENV == 'TESTING':
-            sql = "select * from fact_country as f join dim_country as c on f.country_id = c.id where f.id = %s"
+            sql = 'select f.id, total_number_of_sales, country_name, concat("€", format(f.average_sale_price, 2)) as average_sale_price ' \
+                  'from fact_country as f ' \
+                  'join dim_country as c ' \
+                  'on f.country_id = c.id ' \
+                  'where f.id = %s'
             with conn.cursor() as cursor:
                 cursor.execute(sql, id)
             data = cursor.fetchone()
