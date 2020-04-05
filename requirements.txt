@@ -1,7 +1,7 @@
 aniso8601==1.2.0
 appdirs==1.4.0
 click==6.7
-Flask==0.12
+Flask==1.0
 Flask-Limiter==0.9.3
 flask-restplus==0.9.2
 functools32==3.2.3.post2
